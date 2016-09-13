@@ -84,6 +84,18 @@ var getSources = function(input, res) {
     }
   });
 };
+var articleKeywords = function(input, res) {
+  var opts = {
+    'text': input,
+    'language': ['en'],
+  };
+
+  api.listStories(opts, function(err, data) {
+    if (err) { throw err; }
+    console.log('API called!. Data: ' + data);
+    res.send(data);
+  });
+};
 
 module.exports = {
   timelineData: timelineData,
