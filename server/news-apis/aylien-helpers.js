@@ -22,11 +22,12 @@ var timelineData = function(input, res) {
   // values prior to about 3/15/2016 are consistently much lower, reason currently unknown
 
   var opts = {
-    'title': input,
+    'title': '"' + input + '"',
     'language': ['en'],
     // 'publishedAtStart': '2016-03-15T00:00:00Z',
     'publishedAtStart': 'NOW-175DAYS',
     'publishedAtEnd': 'NOW',
+    'sortBy': 'relevance',
     // 'period': '+1DAYS'
   };
 
@@ -41,7 +42,7 @@ var timelineData = function(input, res) {
 };
 
 var articleImport = function(input, res, start, end, limit) {
-  limit = limit || 3;
+  limit = 5;
   var opts = {
     'title': input,
     // 'text': input,
