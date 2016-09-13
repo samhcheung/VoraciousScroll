@@ -133,10 +133,22 @@ angular.module('smartNews.timeline', [])
       })
       .on('click', function(d) {
         var startDate = d.publishedAt.split('T')[0];
-        selectedDate.startDate = new Date(startDate).toISOString();
-        var endDate = new Date(startDate);
-        endDate = endDate.setDate(endDate.getDate() + 1);
-        selectedDate.endDate = new Date(endDate).toISOString();
+        // selectedDate.startDate = new Date(startDate).toISOString();
+        // var endDate = new Date(startDate);
+        // endDate = endDate.setDate(endDate.getDate() + 1);
+        // selectedDate.endDate = new Date(endDate).toISOString();
+
+        var sdate = new Date(startDate);
+        var timeDiff = Math.abs(sdate.getTime() - new Date());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+        diffDays = diffDays-1;
+        selectedDate.startDate = "NOW-"+ diffDays + "DAYS"
+        diffDays = diffDays-1;
+        selectedDate.endDate = "NOW-"+ diffDays + "DAYS"
+        console.log("before",selectedDate.startDate)
+        console.log("after",selectedDate.endDate)
+
+
         $rootScope.$broadcast('user:clickDate', selectedDate);
       });
 
