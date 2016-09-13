@@ -88,5 +88,6 @@ var getSources = function(input, res) {
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
-  getSources: getSources
+  getSources: getSources,
+  articleKeywords: articleKeywords
 };
