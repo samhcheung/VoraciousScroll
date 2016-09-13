@@ -63,7 +63,24 @@ var articleImport = function(input, res, start, end, limit) {
 
 };
 
+var getSources = function(input, res) {
+  var opts = {
+    'title': input,
+    'field': 'source.name'
+  };
+
+  api.listTrends(opts, function(err, data) {
+    if (err) {
+      console.log('error getting sources', err);
+    } else {
+      console.log('sources returned successfully: ' + data);
+      res.send(data);
+    }
+  });
+};
+
 module.exports = {
   timelineData: timelineData,
-  articleImport: articleImport
+  articleImport: articleImport,
+  getSources: getSources
 };
