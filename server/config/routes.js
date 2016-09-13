@@ -51,7 +51,7 @@ module.exports = function(app, express) {
     });
 
 
-  // http://localhost/3000/see-article?input=obama&start=[startdate]&end=[enddate]
+  // see-article?input=obama&start=[startdate]&end=[enddate]
   app.route('/seearticle')
     .get(function(req, res) {
       aylien.articleImport(req.query.input, res, req.query.start, req.query.end, req.query.limit);

@@ -6,6 +6,7 @@ angular.module('smartNews', [
   'smartNews.home',
   'smartNews.results',
   'ngCookies',
+  'smartNews.timeline',
   'smartNews.services',
   'ngSanitize',
   'ui.bootstrap'
