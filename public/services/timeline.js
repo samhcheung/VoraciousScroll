@@ -8,7 +8,7 @@
 
 // 2: Set up graph to start from the middle of y-axes rather than bottom
 
-angular.module('smartNews.services', ['ngCookies'])
+angular.module('smartNews.timeline', [])
 
 .factory('renderGraph', function($rootScope) {
   var selectedDate = {

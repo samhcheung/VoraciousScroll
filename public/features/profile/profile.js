@@ -1,4 +1,4 @@
-angular.module('smartNews.profile', ['smartNews.services'])
+angular.module('smartNews.profile', ['smartNews.services', 'smartNews.timeline'])
 
 .controller('ProfileCtrl', ['$scope', 'isAuth', 'getSavedSearches', 'unsaveArticle', function($scope, isAuth, getSavedSearches, unsaveArticle){
 
