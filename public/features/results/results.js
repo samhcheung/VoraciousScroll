@@ -32,15 +32,19 @@ angular.module('smartNews.results', [])
     //Load the chart if taken to this results area
     var input = $stateParams.input;
 
-    var url = '/results/' + input;
+    var chartUrl = '/results/' + input;
     if (input) {
       $http({
         method: 'GET',
-        url: url
+        url: chartUrl
       })
       .then(
         function(obj){
           renderGraph.renderGraph(obj);
+
+          // render source donut
+          console.log(obj, 'obj');
+          renderGraph.renderSources(obj.data.trends);
         },
         function(error){
           console.log('Error', error);
@@ -56,15 +60,16 @@ angular.module('smartNews.results', [])
     var publishStart = $scope.selectedDate.startDate;
     var publishEnd = $scope.selectedDate.endDate;
 
-    var url = '/seearticle?input=' + '"'+ input +'"' + '&start=' + publishStart + '&end=' + publishEnd;
+    var articleUrl = '/seearticle?input=' + '"'+ input +'"' + '&start=' + publishStart + '&end=' + publishEnd;
 
     $http({
       method: 'GET',
-      url: url
+      url: articleUrl
     }).then(
       function(data) {
         $scope.articleReceived = true;
         $scope.articles = data.data.stories;
+        $scope.trends = data.data.trends;
       },
       function(err) {
         console.log('THERE WAS AN ERROR RECEIVING DATA FROM SEEARTICLE', err);

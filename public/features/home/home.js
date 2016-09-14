@@ -17,5 +17,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 // Home Controller
 .controller('HomeCtrl', function($scope) {
   $scope.test = 'Home View';
+  d3.select('.sources').remove();
+
 
 });
