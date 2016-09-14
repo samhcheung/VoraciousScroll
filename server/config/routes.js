@@ -59,7 +59,7 @@ module.exports = function(app, express) {
 
   app.route('/test')
     .get(function(req, res) {
-      aylien.articleKeywords(req.query.input, function(keywords) {
+      aylien.topicKeywords(req.query.input, function(keywords) {
         res.send(keywords);
       });
     });

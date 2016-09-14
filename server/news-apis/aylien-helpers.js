@@ -91,7 +91,7 @@ var getSources = function(input, res, stories) {
   });
 };
 
-var articleKeywords = function(input, cb) {
+var topicKeywords = function(input, cb) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
@@ -135,5 +135,5 @@ module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
   getSources: getSources,
-  articleKeywords: articleKeywords
+  topicKeywords: topicKeywords
 };
