@@ -8,7 +8,7 @@
             <div class="trend-rank">{{$index + 1}}</div>
           </td>
           <td>
-            <img class="trend-image" ng-src="{{ trend.img }}" alt="trend image">
+            <img ng-click="selectArticle(trend)" class="link trend-image" ng-src="{{ trend.img }}" alt="trend image">
           </td>
           <td>
             <div ng-click="selectArticle(trend)" class="link trend-topic">{{trend.topic}}</div>
