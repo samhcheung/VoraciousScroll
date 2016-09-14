@@ -29,12 +29,34 @@ angular.module('smartNews.results', [])
   };
 
   $scope.getArticle = function() {
-
+    //Load the chart if taken to this results area
     var input = $stateParams.input;
+
+    var url = '/results/' + input;
+    if (input) {
+      $http({
+        method: 'GET',
+        url: url
+      })
+      .then(
+        function(obj){
+          renderGraph.renderGraph(obj);
+        },
+        function(error){
+          console.log('Error', error);
+        }
+      );
+    } else {
+      $state.go('main.home');
+    }
+
+
+
+
     var publishStart = $scope.selectedDate.startDate;
     var publishEnd = $scope.selectedDate.endDate;
 
-    var url = '/seearticle?input=' + input + '&start=' + publishStart + '&end=' + publishEnd;
+    var url = '/seearticle?input=' + '"'+ input +'"' + '&start=' + publishStart + '&end=' + publishEnd;
 
     $http({
       method: 'GET',
@@ -59,8 +81,7 @@ angular.module('smartNews.results', [])
 })
 .directive('resultarticle', function() {
   return {
-    templateUrl: 'features/results/article.html',
-    controller: 'ResultsCtrl'
+    templateUrl: 'features/results/article.html'
   };
 });
 
