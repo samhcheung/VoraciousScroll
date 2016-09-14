@@ -58,7 +58,8 @@ var articleImport = function(input, res, start, end, limit) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      res.send(data);
+      getSources(input, res, data);
+      // res.send(data);
     }
   });
 
@@ -66,7 +67,7 @@ var articleImport = function(input, res, start, end, limit) {
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, res) {
+var getSources = function(input, res, stories) {
   var opts = {
     'title': input,
     'field': 'source.name',
@@ -79,8 +80,9 @@ var getSources = function(input, res) {
     if (err) {
       console.log('error getting sources', err);
     } else {
-      console.log('sources returned successfully: ' + data.trends);
-      res.send(data);
+      console.log('sources returned successfully: ' + data);
+      stories.trends = data.trends;
+      res.send(stories);
     }
   });
 };
