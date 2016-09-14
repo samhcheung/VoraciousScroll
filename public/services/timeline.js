@@ -168,7 +168,7 @@ angular.module('smartNews.timeline', [])
   /* RENDER DONUT */
 
   var renderSources = function(trends, size) {
-    d3.select('.sources').remove();
+    d3.select('.sourcesSVG').remove();
     size = size || {width: 960, height: 500};
 
     var width = size.width,
@@ -185,10 +185,10 @@ angular.module('smartNews.timeline', [])
         .sort(null)
         .value(function(d) { return d.count; });
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select(".sources").append("svg")
         .attr("width", width)
         .attr("height", height)
-        .attr("class", 'sources')
+        .attr("class", 'sourcesSVG')
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
         .attr('class', 'donut');
