@@ -78,7 +78,7 @@ var getSources = function(input, res) {
     if (err) {
       console.log('error getting sources', err);
     } else {
-      console.log('sources returned successfully: ' + data);
+      console.log('sources returned successfully: ' + data.trends);
       res.send(data);
     }
   });

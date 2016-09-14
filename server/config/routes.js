@@ -101,10 +101,9 @@ module.exports = function(app, express) {
 
   // Get list of news sources and number of articles in past 175 days BY TITLE
 
-  app.route('/getSources')
-    .get(function(req, res) {
-      console.log(req.params, 'get sources params');
-      aylien.getSources(req.params.query, res);
+  app.get('/getSources', function(req, res) {
+      console.log(req.query.query, 'get sources params');
+      aylien.getSources(req.query.query, res);
     });
 
 
