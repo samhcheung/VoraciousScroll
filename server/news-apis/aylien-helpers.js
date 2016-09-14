@@ -111,21 +111,30 @@ var topicKeywords = function(input, start, end, cb) {
   });
 };
 
-var topicSentiment = function(input, cb) {
+var topicSentiment = function(input, start, end, cb) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
-    'publishedAtStart': 'NOW-175DAYS',
-    'publishedAtEnd': 'NOW',
+    'publishedAtStart': start,
+    'publishedAtEnd': end,
     'sortBy': 'relevance',
     'perPage': 100,
-    'return[]': 'sentiment'
+    'field': 'sentiment.body.polarity'
   };
+
+  var sentiment = {};
+
+  api.listTrends(opts, function(err, data) {
+    if (err) { throw err; }
+    sentiment = data.trends;
+    cb(sentiment);
+  });
 };
 
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
   getSources: getSources,
-  topicKeywords: topicKeywords
+  topicKeywords: topicKeywords,
+  topicSentiment: topicSentiment
 };
