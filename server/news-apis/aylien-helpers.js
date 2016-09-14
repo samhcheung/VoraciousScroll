@@ -86,14 +86,32 @@ var getSources = function(input, res) {
 };
 var articleKeywords = function(input, res) {
   var opts = {
-    'text': input,
+    'title': '"' + input + '"',
     'language': ['en'],
+    'return[]': 'keywords'
+  };
+
+  var results = {};
+
+  var grabKeywords = function(data) {
+    data.stories.forEach(function(story) {
+      story.keywords.forEach(function(key) {
+        if (!results[key]) { results[key] = 0; }
+        results[key]++;
+      });
+    });
+
+    for (var key in results) {
+      if (results[key] < 2) {
+        delete results[key];
+      }
+    }
+    return results;
   };
 
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
-    console.log('API called!. Data: ' + data);
-    res.send(data);
+    res.send(grabKeywords(data));
   });
 };
 
