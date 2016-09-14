@@ -63,7 +63,7 @@ var articleImport = function(input, res, start, end, limit) {
 
 };
 
-// Get list of news sources and number of articles in past 175 days
+// Get list of news sources and number of articles in past 175 days BY TITLE
 
 var getSources = function(input, res) {
   var opts = {

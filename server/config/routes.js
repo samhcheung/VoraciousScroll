@@ -99,8 +99,8 @@ module.exports = function(app, express) {
       });
     });
 
-  // Get list of news sources and number of articles in past 175 days
-  
+  // Get list of news sources and number of articles in past 175 days BY TITLE
+
   app.route('/getSources')
     .get(function(req, res) {
       console.log(req.params, 'get sources params');
