@@ -111,9 +111,9 @@ angular.module('smartNews.services', ['ngCookies'])
   };
 
   var sanitizeTitle = function(title) {
-    return title.replace('<b>', '')
-      .replace('</b>', '')
-      .replace('&#39;', '');
+    return title.replace(/<b>/g, '')
+      .replace(/<b>/g, '')
+      .replace(/&#39;/g, '');
   };
 
   topTrendsGoogleTrends();
