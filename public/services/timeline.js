@@ -169,7 +169,7 @@ angular.module('smartNews.timeline', [])
 
   var renderSources = function(trends, size) {
     d3.select('.sourcesSVG').remove();
-    size = size || {width: 960, height: 500};
+    size = size || {width: 430, height: 250};
 
     var width = size.width,
         height = size.height,
@@ -190,7 +190,7 @@ angular.module('smartNews.timeline', [])
         .attr("height", height)
         .attr("class", 'sourcesSVG')
         .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+        .attr("transform", "translate(130," + height / 2 + ")")
         .attr('class', 'donut');
 
     var g = svg.selectAll(".arc")
@@ -212,10 +212,10 @@ angular.module('smartNews.timeline', [])
 
     donut.append("g")
       .attr("class", "legendOrdinal")
-      .attr("transform", "translate(-30,-140)");
+      .attr("transform", "translate(150,-100)");
 
     var legendOrdinal = d3.legendColor()
-      .shape("path", d3.symbol().type(d3.symbolCircle).size(size.height * 3/5)())
+      .shape("path", d3.symbol().type(d3.symbolCircle).size(100)())
       .shapePadding(10)
       .scale(ordinal);
 

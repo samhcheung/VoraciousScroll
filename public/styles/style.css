@@ -372,3 +372,7 @@ div.tooltip-articles {
 .search-history-remove {
   width: 10%;
 }
+.sources {
+  width: 420px;
+  height: 250px;
+}
