@@ -131,6 +131,18 @@ var topicKeywords = function(input, cb) {
   });
 };
 
+var topicSentiment = function(input, cb) {
+  var opts = {
+    'title': '"' + input + '"',
+    'language': ['en'],
+    'publishedAtStart': 'NOW-175DAYS',
+    'publishedAtEnd': 'NOW',
+    'sortBy': 'relevance',
+    'perPage': 100,
+    'return[]': 'sentiment'
+  };
+};
+
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
