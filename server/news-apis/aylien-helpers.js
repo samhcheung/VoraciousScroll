@@ -85,25 +85,43 @@ var getSources = function(input, res) {
   });
 };
 
-var articleURLs = function(input, cb) {
+var articleKeywords = function(input, cb) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
-    'return[]': 'links'
+    'publishedAtStart': 'NOW-175DAYS',
+    'publishedAtEnd': 'NOW',
+    'sortBy': 'relevance',
+    'perPage': 100,
+    'return[]': 'keywords'
   };
 
   var results = [];
+  var allKeywords = {};
 
-  var grabURLs = function(data) {
+  var grabKeywords = function(data) {
     data.stories.forEach(function(story) {
-      results.push(story.links.permalink);
+      story.keywords.forEach(function(word) {
+        if (allKeywords[word] === undefined) {
+          allKeywords[word] = 0;
+        }
+        allKeywords[word]++;
+      });
     });
+    for (var key in allKeywords) {
+      if (allKeywords[key] > 10) {
+        results.push({
+          value: key,
+          count: allKeywords[key]
+        });
+      }
+    }
     return results;
   };
 
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
-    cb(grabURLs(data));
+    cb(grabKeywords(data));
   });
 };
 
@@ -111,5 +129,5 @@ module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
   getSources: getSources,
-  articleURLs: articleURLs
+  articleKeywords: articleKeywords
 };
