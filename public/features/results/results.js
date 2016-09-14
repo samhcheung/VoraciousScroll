@@ -32,11 +32,11 @@ angular.module('smartNews.results', [])
     //Load the chart if taken to this results area
     var input = $stateParams.input;
 
-    var url = '/results/' + input;
+    var chartUrl = '/results/' + input;
     if (input) {
       $http({
         method: 'GET',
-        url: url
+        url: chartUrl
       })
       .then(
         function(obj){
@@ -56,11 +56,11 @@ angular.module('smartNews.results', [])
     var publishStart = $scope.selectedDate.startDate;
     var publishEnd = $scope.selectedDate.endDate;
 
-    var url = '/seearticle?input=' + '"'+ input +'"' + '&start=' + publishStart + '&end=' + publishEnd;
+    var articleUrl = '/seearticle?input=' + '"'+ input +'"' + '&start=' + publishStart + '&end=' + publishEnd;
 
     $http({
       method: 'GET',
-      url: url
+      url: articleUrl
     }).then(
       function(data) {
         $scope.articleReceived = true;
