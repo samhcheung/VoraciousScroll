@@ -165,15 +165,17 @@ angular.module('smartNews.timeline', [])
       .call(d3.axisLeft(y));
   };
 
-  var renderSources = function(trends) {
-    console.log(trends);
+  /* RENDER DONUT */
+
+  var renderSources = function(trends, size) {
     d3.select('.sources').remove();
-    var width = 960,
-        height = 500,
+    size = size || {width: 960, height: 500};
+
+    var width = size.width,
+        height = size.height,
         radius = Math.min(width, height) / 2;
 
     var color = d3.scaleOrdinal(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00", '9B5600', '893806', '66221B']);
-        // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
     var arc = d3.arc()
         .outerRadius(radius - 10)
@@ -191,8 +193,6 @@ angular.module('smartNews.timeline', [])
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
         .attr('class', 'donut');
 
-
-
     var g = svg.selectAll(".arc")
         .data(pie(trends))
       .enter().append("g")
@@ -202,12 +202,6 @@ angular.module('smartNews.timeline', [])
         .attr("d", arc)
         .style("fill", function(d) { return color(d.data.value); });
 
-    // g.append("text")
-    //     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-    //     .attr("dy", ".35em")
-    //     .text(function(d) { return d.data.value; });
-
-////////////////////////
     var ordinal = d3.scaleOrdinal()
       .domain(trends.map(function(item) {
         return item.value;
@@ -221,10 +215,7 @@ angular.module('smartNews.timeline', [])
       .attr("transform", "translate(-30,-140)");
 
     var legendOrdinal = d3.legendColor()
-      //d3 symbol creates a path-string, for example
-      //"M0,-8.059274488676564L9.306048591020996,
-      //8.059274488676564 -9.306048591020996,8.059274488676564Z"
-      .shape("path", d3.symbol().type(d3.symbolCircle).size(300)())
+      .shape("path", d3.symbol().type(d3.symbolCircle).size(size.height * 3/5)())
       .shapePadding(10)
       .scale(ordinal);
 
