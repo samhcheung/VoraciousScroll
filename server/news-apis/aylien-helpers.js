@@ -63,10 +63,15 @@ var articleImport = function(input, res, start, end, limit) {
 
 };
 
+// Get list of news sources and number of articles in past 175 days
+
 var getSources = function(input, res) {
   var opts = {
     'title': input,
-    'field': 'source.name'
+    'field': 'source.name',
+    'language': ['en'],
+    'publishedAtStart': 'NOW-175DAYS',
+    'publishedAtEnd': 'NOW'
   };
 
   api.listTrends(opts, function(err, data) {

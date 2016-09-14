@@ -99,6 +99,14 @@ module.exports = function(app, express) {
       });
     });
 
+  // Get list of news sources and number of articles in past 175 days
+  
+  app.route('/getSources')
+    .get(function(req, res) {
+      console.log(req.params, 'get sources params');
+      aylien.getSources(req.params.query, res);
+    });
+
 
   // Error handling: send log the error and send status 500. This handles one error.
   app.use(function(err, req, res, next) {
