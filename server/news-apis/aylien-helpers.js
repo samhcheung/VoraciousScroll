@@ -91,43 +91,23 @@ var getSources = function(input, res, stories) {
   });
 };
 
-var topicKeywords = function(input, cb) {
+var topicKeywords = function(input, start, end, cb) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
-    'publishedAtStart': 'NOW-175DAYS',
-    'publishedAtEnd': 'NOW',
     'sortBy': 'relevance',
+    'publishedAtStart': start,
+    'publishedAtEnd': end,
     'perPage': 100,
-    'return[]': 'keywords'
+    'field': 'keywords'
   };
 
-  var results = [];
-  var allKeywords = {};
+  var keywords = {};
 
-  var grabKeywords = function(data) {
-    data.stories.forEach(function(story) {
-      story.keywords.forEach(function(word) {
-        if (allKeywords[word] === undefined) {
-          allKeywords[word] = 0;
-        }
-        allKeywords[word]++;
-      });
-    });
-    for (var key in allKeywords) {
-      if (allKeywords[key] > 10) {
-        results.push({
-          value: key,
-          count: allKeywords[key]
-        });
-      }
-    }
-    return results;
-  };
-
-  api.listStories(opts, function(err, data) {
+  api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    cb(grabKeywords(data));
+    keywords = data.trends;
+    cb(keywords);
   });
 };
 
