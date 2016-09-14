@@ -68,6 +68,7 @@ var articleImport = function(input, res, start, end, limit) {
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
 var getSources = function(input, res, stories) {
+  stories = stories || {};
   var opts = {
     'title': input,
     'field': 'source.name',

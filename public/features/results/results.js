@@ -41,6 +41,9 @@ angular.module('smartNews.results', [])
       .then(
         function(obj){
           renderGraph.renderGraph(obj);
+
+          // render source donut
+          renderGraph.renderSources(obj.trends);
         },
         function(error){
           console.log('Error', error);
@@ -65,6 +68,7 @@ angular.module('smartNews.results', [])
       function(data) {
         $scope.articleReceived = true;
         $scope.articles = data.data.stories;
+        $scope.trends = data.data.trends;
       },
       function(err) {
         console.log('THERE WAS AN ERROR RECEIVING DATA FROM SEEARTICLE', err);
