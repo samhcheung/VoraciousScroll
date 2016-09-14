@@ -43,7 +43,8 @@ angular.module('smartNews.results', [])
           renderGraph.renderGraph(obj);
 
           // render source donut
-          renderGraph.renderSources(obj.trends);
+          console.log(obj, 'obj');
+          renderGraph.renderSources(obj.data.trends);
         },
         function(error){
           console.log('Error', error);

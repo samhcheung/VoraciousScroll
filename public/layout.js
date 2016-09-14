@@ -102,6 +102,7 @@ angular.module('smartNews', [
             window.objWin = obj;
             window.renderGraphWin = renderGraph.renderGraph;
             renderGraph.renderGraph(obj);
+            renderGraph.renderSources(obj.data.trends);
 
           });
         },

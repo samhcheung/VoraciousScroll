@@ -36,7 +36,9 @@ var timelineData = function(input, res) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      res.send(data);
+      getSources(input, res, data);
+
+      // res.send(data);
     }
   });
 };
@@ -58,8 +60,7 @@ var articleImport = function(input, res, start, end, limit) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      getSources(input, res, data);
-      // res.send(data);
+      res.send(data);
     }
   });
 
@@ -73,6 +74,7 @@ var getSources = function(input, res, stories) {
     'title': input,
     'field': 'source.name',
     'language': ['en'],
+    'sourceLocationsCountry': ['US'],
     'publishedAtStart': 'NOW-175DAYS',
     'publishedAtEnd': 'NOW'
   };
@@ -82,7 +84,8 @@ var getSources = function(input, res, stories) {
       console.log('error getting sources', err);
     } else {
       console.log('sources returned successfully: ' + data);
-      stories.trends = data.trends;
+      // console.log( data.trends.slice(0, 4));
+      stories.trends = data.trends.slice(0, 10);
       res.send(stories);
     }
   });
