@@ -57,6 +57,11 @@ module.exports = function(app, express) {
       aylien.articleImport(req.query.input, res, req.query.start, req.query.end, req.query.limit);
     });
 
+  app.route('/test')
+    .get(function(req, res) {
+      aylien.articleKeywords(req.query.input, res);
+    });
+
   /************************ GOOGLE TRENDS **********************************/
   // Top trends pull top # of trends from specified country
     // googleTrends.hotTrends(resultLimit, country, res)
