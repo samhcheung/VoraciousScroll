@@ -91,43 +91,43 @@ var getSources = function(input, res, stories) {
   });
 };
 
-var articleKeywords = function(input, cb) {
+var topicKeywords = function(input, start, end, cb) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
-    'publishedAtStart': 'NOW-175DAYS',
-    'publishedAtEnd': 'NOW',
+    'sortBy': 'relevance',
+    'publishedAtStart': start,
+    'publishedAtEnd': end,
+    'perPage': 100,
+    'field': 'keywords'
+  };
+
+  var keywords = {};
+
+  api.listTrends(opts, function(err, data) {
+    if (err) { throw err; }
+    keywords = data.trends;
+    cb(keywords);
+  });
+};
+
+var topicSentiment = function(input, start, end, cb) {
+  var opts = {
+    'title': '"' + input + '"',
+    'language': ['en'],
+    'publishedAtStart': start,
+    'publishedAtEnd': end,
     'sortBy': 'relevance',
     'perPage': 100,
-    'return[]': 'keywords'
+    'field': 'sentiment.body.polarity'
   };
 
-  var results = [];
-  var allKeywords = {};
+  var sentiment = {};
 
-  var grabKeywords = function(data) {
-    data.stories.forEach(function(story) {
-      story.keywords.forEach(function(word) {
-        if (allKeywords[word] === undefined) {
-          allKeywords[word] = 0;
-        }
-        allKeywords[word]++;
-      });
-    });
-    for (var key in allKeywords) {
-      if (allKeywords[key] > 10) {
-        results.push({
-          value: key,
-          count: allKeywords[key]
-        });
-      }
-    }
-    return results;
-  };
-
-  api.listStories(opts, function(err, data) {
+  api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    cb(grabKeywords(data));
+    sentiment = data.trends;
+    cb(sentiment);
   });
 };
 
@@ -135,5 +135,6 @@ module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
   getSources: getSources,
-  articleKeywords: articleKeywords
+  topicKeywords: topicKeywords,
+  topicSentiment: topicSentiment
 };

@@ -59,8 +59,8 @@ module.exports = function(app, express) {
 
   app.route('/test')
     .get(function(req, res) {
-      aylien.articleKeywords(req.query.input, function(keywords) {
-        res.send(keywords);
+      aylien.topicSentiment(req.query.input, req.query.start, req.query.end, function(sentiment) {
+        res.send(sentiment);
       });
     });
 
