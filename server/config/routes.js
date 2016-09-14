@@ -3,6 +3,7 @@ var routes = require('express').Router();
 var passport = require('./passport.js');
 var aylien = require('../news-apis/aylien-helpers.js');
 var googleTrends = require('../news-apis/google-trends-helpers.js');
+var alchemy = require('../news-apis/watson-alchemy-helpers.js');
 var request = require('request');
 var db = require('./db.controller.js');
 var path = require('path');
@@ -59,7 +60,9 @@ module.exports = function(app, express) {
 
   app.route('/test')
     .get(function(req, res) {
-      aylien.articleKeywords(req.query.input, res);
+      aylien.articleURLs(req.query.input, function(websites) {
+        res.send(websites);
+      });
     });
 
   /************************ GOOGLE TRENDS **********************************/

@@ -91,34 +91,25 @@ var getSources = function(input, res, stories) {
   });
 };
 
-var articleKeywords = function(input, res) {
+var articleURLs = function(input, cb) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
-    'return[]': 'keywords'
+    'return[]': 'links'
   };
 
-  var results = {};
+  var results = [];
 
-  var grabKeywords = function(data) {
+  var grabURLs = function(data) {
     data.stories.forEach(function(story) {
-      story.keywords.forEach(function(key) {
-        if (!results[key]) { results[key] = 0; }
-        results[key]++;
-      });
+      results.push(story.links.permalink);
     });
-
-    for (var key in results) {
-      if (results[key] < 2) {
-        delete results[key];
-      }
-    }
     return results;
   };
 
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
-    res.send(grabKeywords(data));
+    cb(grabURLs(data));
   });
 };
 
@@ -126,5 +117,5 @@ module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
   getSources: getSources,
-  articleKeywords: articleKeywords
+  articleURLs: articleURLs
 };
