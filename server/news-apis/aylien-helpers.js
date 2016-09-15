@@ -36,9 +36,15 @@ var timelineData = function(input, cb) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      getSources(input, function(results) {
-        data.sources = results;
-        cb(data);
+      getSources(input, function(resultSources) {
+        data.sources = resultSources;
+        getKeywords(input, function(resultKeywords) {
+          data.keywords = resultKeywords;
+          getSentiment(input, function(resultSentiment) {
+            data.sentiment = resultSentiment;
+            cb(data);
+          });
+        });
       });
 
       // res.send(data);
@@ -142,7 +148,7 @@ var getSentiment = function(input, cb, start, end) {
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
-  getSources: getSources,
-  topicKeywords: topicKeywords,
-  topicSentiment: topicSentiment
+  // getSources: getSources,
+  // getKeywords: getKeywords,
+  // getSentiment: getSentiment
 };
