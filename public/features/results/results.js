@@ -40,11 +40,11 @@ angular.module('smartNews.results', [])
       })
       .then(
         function(obj){
-          renderGraph.renderGraph(obj);
+          renderGraph.renderGraph(obj.data.timeline);
 
           // render source donut
           console.log(obj, 'obj');
-          renderGraph.renderSources(obj.data.trends);
+          renderGraph.renderSources(obj.data.sources);
         },
         function(error){
           console.log('Error', error);

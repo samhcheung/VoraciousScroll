@@ -14,7 +14,7 @@ app_id.apiKey = aylienKeys.app_id;
 var app_key = api.apiClient.authentications['app_key'];
 app_key.apiKey = aylienKeys.app_key;
 
-var timelineData = function(input, res) {
+var timelineData = function(input, cb) {
 
   // more options here: https://newsapi.aylien.com/docs/endpoints/time_series/nodejs
   // date/time formatting: https://newsapi.aylien.com/docs/working-with-dates
@@ -36,9 +36,17 @@ var timelineData = function(input, res) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      getSources(input, res, data);
-
-      // res.send(data);
+      // getSources(input, function(resultSources) {
+      //   data.sources = resultSources;
+      //   getKeywords(input, function(resultKeywords) {
+      //     data.keywords = resultKeywords;
+      //     getSentiment(input, function(resultSentiment) {
+      //       data.sentiment = resultSentiment;
+      //       cb(data);
+      //     });
+      //   });
+      // });
+      cb(data);
     }
   });
 };
@@ -68,15 +76,18 @@ var articleImport = function(input, res, start, end, limit) {
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, res, stories) {
-  stories = stories || {};
+var getSources = function(input, cb, start, end) {
+  start = start || 'NOW-175DAYS';
+  end = end || 'NOW';
+  // stories = stories || {};
+
   var opts = {
     'title': input,
     'field': 'source.name',
     'language': ['en'],
     'sourceLocationsCountry': ['US'],
-    'publishedAtStart': 'NOW-175DAYS',
-    'publishedAtEnd': 'NOW'
+    'publishedAtStart': start,
+    'publishedAtEnd': end
   };
 
   api.listTrends(opts, function(err, data) {
@@ -85,13 +96,16 @@ var getSources = function(input, res, stories) {
     } else {
       console.log('sources returned successfully: ' + data);
       // console.log( data.trends.slice(0, 4));
-      stories.trends = data.trends.slice(0, 10);
-      res.send(stories);
+      var sources = data.trends.slice(0, 10);
+      cb(sources);
     }
   });
 };
 
-var topicKeywords = function(input, start, end, cb) {
+var getKeywords = function(input, cb, start, end) {
+  start = start || 'NOW-175DAYS';
+  end = end || 'NOW';
+
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
@@ -102,16 +116,17 @@ var topicKeywords = function(input, start, end, cb) {
     'field': 'keywords'
   };
 
-  var keywords = {};
-
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    keywords = data.trends;
+    var keywords = data.trends;
     cb(keywords);
   });
 };
 
-var topicSentiment = function(input, start, end, cb) {
+var getSentiment = function(input, cb, start, end) {
+  start = start || 'NOW-175DAYS';
+  end = end || 'NOW';
+
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
@@ -122,19 +137,35 @@ var topicSentiment = function(input, start, end, cb) {
     'field': 'sentiment.body.polarity'
   };
 
-  var sentiment = {};
-
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    sentiment = data.trends;
+    var sentiment = data.trends;
     cb(sentiment);
+  });
+};
+
+var getAnalysis = function(data, input, cb) {
+  // currently not asynchronous
+  timelineData(input, function(resultTimeline) {
+    data.timeline = resultTimeline;
+    getSources(input, function(resultSources) {
+      data.sources = resultSources;
+      getKeywords(input, function(resultKeywords) {
+        data.keywords = resultKeywords;
+        getSentiment(input, function(resultSentiment) {
+          data.sentiment = resultSentiment;
+          cb(data);
+        });
+      });
+    });
   });
 };
 
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
-  getSources: getSources,
-  topicKeywords: topicKeywords,
-  topicSentiment: topicSentiment
+  // getSources: getSources,
+  // getKeywords: getKeywords,
+  // getSentiment: getSentiment,
+  getAnalysis: getAnalysis
 };

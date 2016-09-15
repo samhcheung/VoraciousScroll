@@ -18,7 +18,7 @@ angular.module('smartNews.timeline', [])
 
   var renderGraph = function(dataObj) {
 
-    data = dataObj.data.timeSeries;
+    data = dataObj.timeSeries;
 
     //clear out contents of graph prior to rendering, to prevent stacking graphs
     // using 'window' is necessary here due to lexical scope.

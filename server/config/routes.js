@@ -6,6 +6,7 @@ var googleTrends = require('../news-apis/google-trends-helpers.js');
 var request = require('request');
 var db = require('./db.controller.js');
 var path = require('path');
+var async = require('async');
 
 module.exports = function(app, express) {
 
@@ -27,7 +28,7 @@ module.exports = function(app, express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.get('/enter', function(req, res){
+  app.get('/enter', function(req, res) {
     console.log(__dirname);
     res.sendFile(path.join(__dirname + '/../../public/layout.html'));
   });
@@ -47,21 +48,17 @@ module.exports = function(app, express) {
   app.route('/results/:input')
     .get(function(req, res) {
       console.log('Received get on /results/:input from app.route on routes.js');
-      aylien.timelineData(req.params.input, res);
+      var data = {};
+      var input = req.params.input;
+      aylien.getAnalysis(data, input, function() {
+        res.send(data);
+      });
     });
-
 
   // see-article?input=obama&start=[startdate]&end=[enddate]
   app.route('/seearticle')
     .get(function(req, res) {
       aylien.articleImport(req.query.input, res, req.query.start, req.query.end, req.query.limit);
-    });
-
-  app.route('/test')
-    .get(function(req, res) {
-      aylien.topicSentiment(req.query.input, req.query.start, req.query.end, function(sentiment) {
-        res.send(sentiment);
-      });
     });
 
   /************************ GOOGLE TRENDS **********************************/
@@ -94,7 +91,7 @@ module.exports = function(app, express) {
 
   app.route('/unsaveArticle/:id')
     .delete(function(req, res) {
-      db.unsaveArticle.delete(req, function(err, success){
+      db.unsaveArticle.delete(req, function(err, success) {
         res.send(success);
       });
     });
@@ -105,14 +102,6 @@ module.exports = function(app, express) {
         res.send(success);
       });
     });
-
-  // Get list of news sources and number of articles in past 175 days BY TITLE
-
-  app.get('/getSources', function(req, res) {
-      console.log(req.query.query, 'get sources params');
-      aylien.getSources(req.query.query, res);
-    });
-
 
   // Error handling: send log the error and send status 500. This handles one error.
   app.use(function(err, req, res, next) {
