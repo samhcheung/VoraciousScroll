@@ -15,9 +15,11 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 })
 
 // Home Controller
-.controller('HomeCtrl', function($scope) {
+.controller('HomeCtrl', function($scope, newTopTrends) {
   $scope.test = 'Home View';
   d3.select('.sources').remove();
+  console.log('insidehomectrl', newTopTrends);
+  $scope.$parent.newTopTrends = newTopTrends;
 
 
 });

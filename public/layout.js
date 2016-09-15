@@ -24,7 +24,20 @@ angular.module('smartNews', [
       url: '/home',
       templateUrl: 'features/home/home.html',
       controller: 'HomeCtrl',
-      authenticate: false
+      authenticate: false,
+      resolve : {
+        newTopTrends : function(TopTrendsFactory) {
+          console.log('Inside resolve newTopTrends');
+          var topTrends = [];
+          return TopTrendsFactory.topTrendsGoogleTrends().then( function (response) {
+            console.log('layout',response.data);
+            response.data.forEach(function(topic, index) {
+              topTrends.push(TopTrendsFactory.formattedTopic(topic));
+            })
+            return topTrends;
+          });
+        }
+    }
     })
 
     .state('main.results', {

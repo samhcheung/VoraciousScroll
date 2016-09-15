@@ -92,18 +92,18 @@ angular.module('smartNews.services', ['ngCookies'])
         method: 'GET',
         url: '/api/news/topTrendsDetail'
       })
-      .then(function(response) {
-        response.data.forEach(function(topic, index) {
-          if (index === 0) {
-            var title = sanitizeTitle(formattedTopic(topic).articleTitle);
-            getPrimaryArticle(title)
-              .then(function(article) {
-                primaryArticle.push(article.data.stories[0]);
-              });
-          }
-          topTrends.push(formattedTopic(topic));
-        });
-      });
+      // .then(function(response) {
+      //   response.data.forEach(function(topic, index) {
+      //     if (index === 0) {
+      //       var title = sanitizeTitle(formattedTopic(topic).articleTitle);
+      //       getPrimaryArticle(title)
+      //         .then(function(article) {
+      //           primaryArticle.push(article.data.stories[0]);
+      //         });
+      //     }
+      //     topTrends.push(formattedTopic(topic));
+      //   });
+      // });
   };
 
   var setPrimaryArticle = function(article) {
@@ -116,14 +116,16 @@ angular.module('smartNews.services', ['ngCookies'])
       .replace(/&#39;/g, '');
   };
 
-  topTrendsGoogleTrends();
+  //topTrendsGoogleTrends();
 
   return {
     topTrends: topTrends,
     primaryArticle: primaryArticle,
     setPrimaryArticle: setPrimaryArticle,
     getPrimaryArticle: getPrimaryArticle,
-    sanitizeTitle: sanitizeTitle
+    sanitizeTitle: sanitizeTitle,
+    topTrendsGoogleTrends: topTrendsGoogleTrends,
+    formattedTopic: formattedTopic
   };
 });
 
