@@ -264,12 +264,12 @@ angular.module('smartNews.timeline', [])
     }
   };
 
-  var renderSentiment = function() {
-    var chartWidth = 250;
+  var renderSentiment = function(data) {
+    var chartWidth = 300;
     var barHeight = 50;
-    var groupHeight = barHeight * data.sentiment.length;
+    var groupHeight = barHeight * data.length;
     var gapBetweenGroups = 10;
-    var spaceForLabels = 80;
+    var spaceForLabels = 0; // no label to the left
     var spaceForLegend = 150;
 
     // Zip the series data together (first values, second values, etc.)
@@ -297,28 +297,31 @@ angular.module('smartNews.timeline', [])
       return sorted;
     };
 
-    data.sentiment = sortSentiment(data.sentiment);
+    data = sortSentiment(data);
 
-    for (var i = 0; i < data.sentiment.length; i++) {
-      zippedData.push(data.sentiment[i].count / sum);
+    for (var i = 0; i < data.length; i++) {
+      zippedData.push(data[i].count / sum);
     }
 
     // Color scale
-    var color = d3.scale.category20();
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+    // var color = d3.scale.category20(); // v3
     var chartHeight = barHeight * zippedData.length + gapBetweenGroups;
 
-    var x = d3.scale.linear()
+    var x = d3.scaleLinear()
       .domain([0, d3.max(zippedData)])
       .range([0, chartWidth]);
 
-    var y = d3.scale.linear()
+    var y = d3.scaleLinear()
       .range([chartHeight + gapBetweenGroups, 0]);
 
-    var yAxis = d3.svg.axis()
-      .scale(y)
-      .tickFormat('')
-      .tickSize(0)
-      .orient('left');
+    var yAxis = d3.axisLeft(y);
+
+      // .scale(y) // v3
+      // .tickFormat('')
+      // .tickSize(0)
+      // .orient('left');
 
     // Specify the chart area and dimensions
     var chart = d3.select('.chart')
@@ -330,13 +333,13 @@ angular.module('smartNews.timeline', [])
       .data(zippedData)
       .enter().append('g')
       .attr('transform', function(d, i) {
-        return 'translate(' + spaceForLabels + ',' + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i / data.sentiment.length))) + ')';
+        return 'translate(' + spaceForLabels + ',' + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i / data.length))) + ')';
       });
 
     // Create rectangles of the correct width
     bar.append('rect')
       .attr('fill', function(d, i) {
-        return color(i % data.sentiment.length);
+        return color(i % data.length);
       })
       .attr('class', 'bar')
       .attr('width', x)
@@ -345,30 +348,30 @@ angular.module('smartNews.timeline', [])
     // Add text label in bar
     bar.append('text')
       .attr('x', function(d) {
-        return x(d) - 3;
+        return x(d) - 50;
       })
       .attr('y', barHeight / 2)
-      .attr('fill', 'red')
+      .attr('fill', 'white')
       .attr('dy', '.35em')
       .text(function(d) {
         return Math.floor(d * 100) + '%';
       });
 
     // Draw labels
-    bar.append('text')
-      .attr('class', 'label')
-      .attr('x', function(d) {
-        return -10;
-      })
-      .attr('y', groupHeight / 2)
-      .attr('dy', '.35em')
-      .text(function(d, i) {
-        if (i % data.sentiment.length === 0) {
-          return 'Sentiments';
-        } else {
-          return '';
-        }
-      });
+    // bar.append('text')
+    //   .attr('class', 'label')
+    //   .attr('x', function(d) {
+    //     return -10;
+    //   })
+    //   .attr('y', groupHeight / 2)
+    //   .attr('dy', '.35em')
+    //   .text(function(d, i) {
+    //     if (i % data.length === 0) {
+    //       return 'Sentiments';
+    //     } else {
+    //       return '';
+    //     }
+    //   });
 
     // chart.append('g')
     //   .attr('class', 'y axis')
@@ -380,7 +383,7 @@ angular.module('smartNews.timeline', [])
     var legendSpacing = 4;
 
     var legend = chart.selectAll('.legend')
-      .data(data.sentiment)
+      .data(data)
       .enter()
       .append('g')
       .attr('transform', function(d, i) {
