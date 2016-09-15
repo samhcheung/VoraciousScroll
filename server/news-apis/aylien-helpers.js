@@ -1,5 +1,6 @@
 var aylienKeys = require('../../keys.js').aylien;
 var AylienNewsApi = require('aylien-news-api');
+var async = require('async');
 
 /************* AYLIEN API HELPERS ********************/
 
