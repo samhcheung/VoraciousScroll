@@ -55,19 +55,11 @@ module.exports = function(app, express) {
       });
     });
 
-
   // see-article?input=obama&start=[startdate]&end=[enddate]
   app.route('/seearticle')
     .get(function(req, res) {
       aylien.articleImport(req.query.input, res, req.query.start, req.query.end, req.query.limit);
     });
-
-  // app.route('/test')
-  //   .get(function(req, res) {
-  //     aylien.topicSentiment(req.query.input, req.query.start, req.query.end, function(sentiment) {
-  //       res.send(sentiment);
-  //     });
-  //   });
 
   /************************ GOOGLE TRENDS **********************************/
   // Top trends pull top # of trends from specified country
@@ -110,14 +102,6 @@ module.exports = function(app, express) {
         res.send(success);
       });
     });
-
-  // Get list of news sources and number of articles in past 175 days BY TITLE
-
-  // app.get('/getSources', function(req, res) {
-  //   console.log(req.query.query, 'get sources params');
-  //   aylien.getSources(req.query.query, res);
-  // });
-
 
   // Error handling: send log the error and send status 500. This handles one error.
   app.use(function(err, req, res, next) {
