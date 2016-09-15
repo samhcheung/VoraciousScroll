@@ -1,0 +1,170 @@
+diff --cc public/services/timeline.js
+index 12609d3,ad62bd0..0000000
+--- a/public/services/timeline.js
++++ b/public/services/timeline.js
+@@@ -165,67 -165,44 +165,110 @@@ angular.module('smartNews.timeline', []
+        .call(d3.axisLeft(y));
+    };
+  
+-   /* RENDER DONUT */
+++  /* 
+++   * Render Donut 
+++   */
+ +
+ +  var renderSources = function(trends, size) {
+ +    d3.select('.sources').remove();
+ +    size = size || {width: 960, height: 500};
+ +
+ +    var width = size.width,
+ +        height = size.height,
+ +        radius = Math.min(width, height) / 2;
+ +
+ +    var color = d3.scaleOrdinal(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00", '9B5600', '893806', '66221B']);
+ +
+ +    var arc = d3.arc()
+ +        .outerRadius(radius - 10)
+ +        .innerRadius(radius - 70);
+ +
+ +    var pie = d3.pie()
+ +        .sort(null)
+ +        .value(function(d) { return d.count; });
+ +
+ +    var svg = d3.select("body").append("svg")
+ +        .attr("width", width)
+ +        .attr("height", height)
+ +        .attr("class", 'sources')
+ +        .append("g")
+ +        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+ +        .attr('class', 'donut');
+ +
+ +    var g = svg.selectAll(".arc")
+ +        .data(pie(trends))
+ +      .enter().append("g")
+ +        .attr("class", "arc");
+ +
+ +    g.append("path")
+ +        .attr("d", arc)
+ +        .style("fill", function(d) { return color(d.data.value); });
+ +
+ +    var ordinal = d3.scaleOrdinal()
+ +      .domain(trends.map(function(item) {
+ +        return item.value;
+ +      }))
+ +      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00", '9B5600', '893806', '66221B']);
+ +
+ +    var donut = d3.select(".donut");
+ +
+ +    donut.append("g")
+ +      .attr("class", "legendOrdinal")
+ +      .attr("transform", "translate(-30,-140)");
+ +
+ +    var legendOrdinal = d3.legendColor()
+ +      .shape("path", d3.symbol().type(d3.symbolCircle).size(size.height * 3/5)())
+ +      .shapePadding(10)
+ +      .scale(ordinal);
+ +
+ +    donut.select(".legendOrdinal")
+ +      .call(legendOrdinal);
+ + 
+ +  };
++ 
++   /*
++    * Cloud graph starts here
++    */
+++  var renderCloud = function(words, size) {
+++    size = size || {width: 960, height: 500};
+++
++     var color = $window.d3.scale.linear()
+ -            .domain([0,1,2,3,4,5,6,10,15,20,100])
+ -            .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+ -      
+ -    d3.layout.cloud().size([800, 300])
+ -            .words(frequency_list)
+ -            .rotate(0)
+ -            .fontSize(function(d) { return d.size; })
+ -            .on("end", draw)
+ -            .start();
+++      .domain([0,1,2,3,4,5,6,10,15,20,100])
+++      .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
++       
+++    d3.layout.cloud().size([size.width - 50, size.height - 50]) // was 800x300
+++      .words(frequency_list)
+++      .rotate(0)
+++      .fontSize(function(d) { return d.size; })
+++      .on("end", draw)
+++      .start();
+++
++     function draw(words) {
+ -        d3.select("body").append("svg")
+ -                .attr("width", 850)
+ -                .attr("height", 350)
+ -                .attr("class", "wordcloud")
+ -                .append("g")
+ -                // without the transform, words words would get cutoff to the left and top, they would
+ -                // appear outside of the SVG area
+ -                .attr("transform", "translate(320,200)")
+ -                .selectAll("text")
+ -                .data(words)
+ -                .enter().append("text")
+ -                .style("font-size", function(d) { return d.size + "px"; })
+ -                .style("fill", function(d, i) { return color(i); })
+ -                .attr("transform", function(d) {
+ -                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+ -                })
+ -                .text(function(d) { return d.text; });
+++      d3.select("body").append("svg")
+++        .attr("width", size.width + 50) // was 850
+++        .attr("height", size.height + 50) // was 350
+++        .attr("class", "wordcloud")
+++        .append("g")
+++        // without the transform, words words would get cutoff to the left and top, they would
+++        // appear outside of the SVG area
+++        .attr("transform", "translate(320,200)")   // scale this?
+++        .selectAll("text")
+++        .data(words)
+++        .enter().append("text")
+++        .style("font-size", function(d) { return d.size + "px"; })
+++        .style("fill", function(d, i) { return color(i); })
+++        .attr("transform", function(d) {
+++            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+++        })
+++        .text(function(d) { return d.text; });
++     }
+++  }
++ 
++ 
+    return {
+      renderGraph: renderGraph,
+ -    selectedDate: selectedDate
+ +    selectedDate: selectedDate,
+-     renderSources: renderSources
+++    renderSources: renderSources,
+++    renderCloud: renderCloud
+    };
+ -})
+ +});
+diff --git a/public/layout.html b/public/layout.html
+index c7d424b..16546a8 100644
+--- a/public/layout.html
++++ b/public/layout.html
+@@ -16,6 +16,7 @@
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-cookies.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.1.3/ui-bootstrap.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.1.3/ui-bootstrap-tpls.min.js"></script>
++  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-dispatch/2.9.0/d3-legend.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js"></script>
+   <script src="services/timeline.js"></script>
+   <script src="services/services.js"></script>
+diff --git a/public/layout.js b/public/layout.js
+index fd05a99..885dc96 100644
+--- a/public/layout.js
++++ b/public/layout.js
+@@ -103,7 +103,7 @@ angular.module('smartNews', [
+             window.renderGraphWin = renderGraph.renderGraph;
+             renderGraph.renderGraph(obj);
+             renderGraph.renderSources(obj.data.trends);
+-
++            renderGraph.renderCloud(obj.data.keywords);
+           });
+         },
+         function(error){
