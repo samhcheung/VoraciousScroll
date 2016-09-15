@@ -6,6 +6,7 @@ var googleTrends = require('../news-apis/google-trends-helpers.js');
 var request = require('request');
 var db = require('./db.controller.js');
 var path = require('path');
+var async = require('async');
 
 module.exports = function(app, express) {
 
