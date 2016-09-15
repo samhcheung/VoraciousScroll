@@ -267,7 +267,7 @@ angular.module('smartNews.timeline', [])
   var renderSentiment = function() {
     var chartWidth = 250;
     var barHeight = 50;
-    var groupHeight = barHeight * data.series.length;
+    var groupHeight = barHeight * data.sentiment.length;
     var gapBetweenGroups = 10;
     var spaceForLabels = 80;
     var spaceForLegend = 150;
@@ -297,10 +297,10 @@ angular.module('smartNews.timeline', [])
       return sorted;
     };
 
-    data2.sentiment = sortSentiment(data2.sentiment);
+    data.sentiment = sortSentiment(data.sentiment);
 
-    for (var i = 0; i < data2.sentiment.length; i++) {
-      zippedData.push(data2.sentiment[i].count / sum);
+    for (var i = 0; i < data.sentiment.length; i++) {
+      zippedData.push(data.sentiment[i].count / sum);
     }
 
     // Color scale
@@ -330,13 +330,13 @@ angular.module('smartNews.timeline', [])
       .data(zippedData)
       .enter().append('g')
       .attr('transform', function(d, i) {
-        return 'translate(' + spaceForLabels + ',' + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i / data.series.length))) + ')';
+        return 'translate(' + spaceForLabels + ',' + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i / data.sentiment.length))) + ')';
       });
 
     // Create rectangles of the correct width
     bar.append('rect')
       .attr('fill', function(d, i) {
-        return color(i % data.series.length);
+        return color(i % data.sentiment.length);
       })
       .attr('class', 'bar')
       .attr('width', x)
@@ -363,7 +363,7 @@ angular.module('smartNews.timeline', [])
       .attr('y', groupHeight / 2)
       .attr('dy', '.35em')
       .text(function(d, i) {
-        if (i % data2.sentiment.length === 0) {
+        if (i % data.sentiment.length === 0) {
           return 'Sentiments';
         } else {
           return '';
@@ -380,7 +380,7 @@ angular.module('smartNews.timeline', [])
     var legendSpacing = 4;
 
     var legend = chart.selectAll('.legend')
-      .data(data2.sentiment)
+      .data(data.sentiment)
       .enter()
       .append('g')
       .attr('transform', function(d, i) {
