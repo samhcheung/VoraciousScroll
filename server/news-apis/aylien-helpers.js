@@ -98,6 +98,9 @@ var getSources = function(input, cb, start, end) {
 };
 
 var topicKeywords = function(input, cb, start, end) {
+  start = start || 'NOW-175DAYS';
+  end = end || 'NOW';
+
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
@@ -118,6 +121,9 @@ var topicKeywords = function(input, cb, start, end) {
 };
 
 var topicSentiment = function(input, cb, start, end) {
+  start = start || 'NOW-175DAYS';
+  end = end || 'NOW';
+
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
