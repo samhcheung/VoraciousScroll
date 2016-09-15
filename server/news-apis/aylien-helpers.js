@@ -36,8 +36,9 @@ var timelineData = function(input, cb) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      getSources(input, data, function(results) {
-        cb(results);
+      getSources(input, function(results) {
+        data.sources = results;
+        cb(data);
       });
 
       // res.send(data);
@@ -70,7 +71,7 @@ var articleImport = function(input, res, start, end, limit) {
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, stories, cb, start, end) {
+var getSources = function(input, cb, start, end) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
   // stories = stories || {};
@@ -90,8 +91,8 @@ var getSources = function(input, stories, cb, start, end) {
     } else {
       console.log('sources returned successfully: ' + data);
       // console.log( data.trends.slice(0, 4));
-      stories.trends = data.trends.slice(0, 10);
-      cb(stories);
+      var sources = data.trends.slice(0, 10);
+      cb(sources);
     }
   });
 };
