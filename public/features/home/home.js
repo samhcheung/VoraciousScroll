@@ -388,7 +388,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           .domain([0,1,2,3,4,5,6,10,15,20,100])
           .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
           
-        d3.layout.cloud().size([size.width - 50, size.height - 50]) // was 800x300
+        d3.layout.cloud().size([size.width - 100, size.height - 100]) // was 800x300
           .words(words)
           .rotate(0)
           .fontSize(function(d) { return total / d.count; })
@@ -402,13 +402,13 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           })
 
           .append("svg")
-            .attr("width", size.width + 50) // was 850
-            .attr("height", size.height + 50) // was 350
+            .attr("width", size.width /2) // was 850
+            .attr("height", size.height /2) // was 350
             .attr("class", "wordcloud")
             .append("g")
             // without the transform, words words would get cutoff to the left and top, they would
             // appear outside of the SVG area
-            .attr("transform", "translate(320,200)")   // scale this?
+            .attr("transform", "translate(" + size.width/4 + "," + size.height/4 + ")")   // scale this?
             .selectAll("text")
             .data(words)
             .enter().append("text")
