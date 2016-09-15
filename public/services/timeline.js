@@ -165,7 +165,9 @@ angular.module('smartNews.timeline', [])
       .call(d3.axisLeft(y));
   };
 
-  /* RENDER DONUT */
+  /* 
+   * Render Donut 
+   */
 
   var renderSources = function(trends, size) {
     d3.select('.sourcesSVG').remove();
@@ -223,9 +225,50 @@ angular.module('smartNews.timeline', [])
       .call(legendOrdinal);
  
   };
+
+  /*
+   * Cloud graph starts here
+   */
+  var renderCloud = function(words, size) {
+    size = size || {width: 960, height: 500};
+
+    var color = $window.d3.scale.linear()
+      .domain([0,1,2,3,4,5,6,10,15,20,100])
+      .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
+      
+    d3.layout.cloud().size([size.width - 50, size.height - 50]) // was 800x300
+      .words(frequency_list)
+      .rotate(0)
+      .fontSize(function(d) { return d.size; })
+      .on("end", draw)
+      .start();
+
+    function draw(words) {
+      d3.select("body").append("svg")
+        .attr("width", size.width + 50) // was 850
+        .attr("height", size.height + 50) // was 350
+        .attr("class", "wordcloud")
+        .append("g")
+        // without the transform, words words would get cutoff to the left and top, they would
+        // appear outside of the SVG area
+        .attr("transform", "translate(320,200)")   // scale this?
+        .selectAll("text")
+        .data(words)
+        .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("fill", function(d, i) { return color(i); })
+        .attr("transform", function(d) {
+            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; });
+    }
+  }
+
+
   return {
     renderGraph: renderGraph,
     selectedDate: selectedDate,
-    renderSources: renderSources
+    renderSources: renderSources,
+    renderCloud: renderCloud
   };
 });
