@@ -14,7 +14,7 @@ app_id.apiKey = aylienKeys.app_id;
 var app_key = api.apiClient.authentications['app_key'];
 app_key.apiKey = aylienKeys.app_key;
 
-var timelineData = function(input, res) {
+var timelineData = function(input, cb) {
 
   // more options here: https://newsapi.aylien.com/docs/endpoints/time_series/nodejs
   // date/time formatting: https://newsapi.aylien.com/docs/working-with-dates
@@ -36,7 +36,9 @@ var timelineData = function(input, res) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      getSources(input, data);
+      getSources(input, data, function(results) {
+        cb(results);
+      });
 
       // res.send(data);
     }
@@ -68,10 +70,10 @@ var articleImport = function(input, res, start, end, limit) {
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, stories, start, end) {
+var getSources = function(input, stories, cb, start, end) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
-  stories = stories || {};
+  // stories = stories || {};
 
   var opts = {
     'title': input,
@@ -89,7 +91,7 @@ var getSources = function(input, stories, start, end) {
       console.log('sources returned successfully: ' + data);
       // console.log( data.trends.slice(0, 4));
       stories.trends = data.trends.slice(0, 10);
-      res.send(stories);
+      cb(stories);
     }
   });
 };
