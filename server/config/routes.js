@@ -109,9 +109,9 @@ module.exports = function(app, express) {
   // Get list of news sources and number of articles in past 175 days BY TITLE
 
   app.get('/getSources', function(req, res) {
-      console.log(req.query.query, 'get sources params');
-      aylien.getSources(req.query.query, res);
-    });
+    console.log(req.query.query, 'get sources params');
+    aylien.getSources(req.query.query, res);
+  });
 
 
   // Error handling: send log the error and send status 500. This handles one error.
