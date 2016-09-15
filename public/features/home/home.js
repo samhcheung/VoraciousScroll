@@ -22,7 +22,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       var renderSources = function(trends, index) {
         d3.selectAll(".sources")
           .filter(function(d, i) {
-            console.log(i, index, 'yoohoo');
             return i === index;
           }).remove();
         size = {width: 430, height: 250};
@@ -44,7 +43,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
         var svg = d3.selectAll(".sources")
           .filter(function(d, i) {
-            console.log(i, index, 'yoohoo');
             return i === index;
           })
           .append("svg")
@@ -70,7 +68,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           }))
           .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00", '9B5600', '893806', '66221B']);
 
-        var donut = d3.select(".donut");
+        var donut = d3.selectAll(".donut")
+          .filter(function(d, i) {
+            return i === index;
+          });
 
         donut.append("g")
           .attr("class", "legendOrdinal")
@@ -87,9 +88,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       };
 
       attr.$observe('index', function(index) {
-        console.log(index);
-        console.log(scope.dummy.trends, 'dummies')
-      renderSources(scope.dummy.trends, index);
+        renderSources(scope.dummy.trends, index);
       });
     }
   };
@@ -105,7 +104,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       'trends': [
         {
           "value": "News Vine",
-          "count": 1
+          "count": 1000
         },
         {
           "value": "Huffington Post",
