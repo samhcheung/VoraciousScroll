@@ -50,18 +50,8 @@ module.exports = function(app, express) {
       console.log('Received get on /results/:input from app.route on routes.js');
       var data = {};
       var input = req.params.input;
-      aylien.timelineData(input, function(results) {
-        data.timeline = results;
-        aylien.getSources(input, function(resultSources) {
-          data.sources = resultSources;
-          aylien.getKeywords(input, function(resultKeywords) {
-            data.keywords = resultKeywords;
-            aylien.getSentiment(input, function(resultSentiment) {
-              data.sentiment = resultSentiment;
-              res.send(data);
-            });
-          });
-        });
+      aylien.getAnalysis(data, input, function() {
+        res.send(data);
       });
     });
 

@@ -46,10 +46,7 @@ var timelineData = function(input, cb) {
       //     });
       //   });
       // });
-      console.log(data);
       cb(data);
-
-      // res.send(data);
     }
   });
 };
@@ -147,10 +144,28 @@ var getSentiment = function(input, cb, start, end) {
   });
 };
 
+var getAnalysis = function(data, input, cb) {
+  // currently not asynchronous
+  timelineData(input, function(resultTimeline) {
+    data.timeline = resultTimeline;
+    getSources(input, function(resultSources) {
+      data.sources = resultSources;
+      getKeywords(input, function(resultKeywords) {
+        data.keywords = resultKeywords;
+        getSentiment(input, function(resultSentiment) {
+          data.sentiment = resultSentiment;
+          cb(data);
+        });
+      });
+    });
+  });
+};
+
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
-  getSources: getSources,
-  getKeywords: getKeywords,
-  getSentiment: getSentiment
+  // getSources: getSources,
+  // getKeywords: getKeywords,
+  // getSentiment: getSentiment,
+  getAnalysis: getAnalysis
 };
