@@ -87,17 +87,20 @@ module.exports = function(app, express) {
 
   app.route('/api/news/fetchData')
     .get(function(req, res) {
-        // get trends, then data
       var current = new Date();
-      // check date within the hour
-      var last = preFetch.date || current;
+      // get trends, then data
+      /* check date within the hour
+      var twohoursago = new Date(current.getTime() - 2*(1000*60*60));
+      var last = preFetch.date || twohoursago;
       var hourDiff = Math.abs(current.getTime() - last.getTime()) / 3600000;
-      if (hourDiff > 0) {
+      */
+      var hourDiff = 1;
+      if (hourDiff === 0) {
          res.send(preFetch);
       } else {
         googleTrends.hotTrendsDetail(null, 5, 'US', function(list) {
           preFetch.list = list;
-          //preFetch.date = current;
+          preFetch.date = current;
           preFetch.count = 0;
           // for each topic get keywords, sentiment, sources, timeline
           for (var i = 0; i < 5; i++) {
