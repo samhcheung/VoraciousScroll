@@ -59,12 +59,12 @@ module.exports = function(app, express) {
       aylien.articleImport(req.query.input, res, req.query.start, req.query.end, req.query.limit);
     });
 
-  app.route('/test')
-    .get(function(req, res) {
-      aylien.topicSentiment(req.query.input, req.query.start, req.query.end, function(sentiment) {
-        res.send(sentiment);
-      });
-    });
+  // app.route('/test')
+  //   .get(function(req, res) {
+  //     aylien.topicSentiment(req.query.input, req.query.start, req.query.end, function(sentiment) {
+  //       res.send(sentiment);
+  //     });
+  //   });
 
   /************************ GOOGLE TRENDS **********************************/
   // Top trends pull top # of trends from specified country

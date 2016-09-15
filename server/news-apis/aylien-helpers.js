@@ -97,7 +97,7 @@ var getSources = function(input, cb, start, end) {
   });
 };
 
-var topicKeywords = function(input, cb, start, end) {
+var getKeywords = function(input, cb, start, end) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
@@ -118,7 +118,7 @@ var topicKeywords = function(input, cb, start, end) {
   });
 };
 
-var topicSentiment = function(input, cb, start, end) {
+var getSentiment = function(input, cb, start, end) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
