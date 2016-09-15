@@ -111,11 +111,9 @@ var topicKeywords = function(input, cb, start, end) {
     'field': 'keywords'
   };
 
-  var keywords = {};
-
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    keywords = data.trends;
+    var keywords = data.trends;
     cb(keywords);
   });
 };
@@ -134,11 +132,9 @@ var topicSentiment = function(input, cb, start, end) {
     'field': 'sentiment.body.polarity'
   };
 
-  var sentiment = {};
-
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    sentiment = data.trends;
+    var sentiment = data.trends;
     cb(sentiment);
   });
 };
