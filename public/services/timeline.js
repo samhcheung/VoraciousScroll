@@ -262,10 +262,152 @@ angular.module('smartNews.timeline', [])
         })
         .text(function(d) { return d.text; });
     }
-  }
+  };
 
   var renderSentiment = function() {
+    var chartWidth = 250;
+    var barHeight = 50;
+    var groupHeight = barHeight * data.series.length;
+    var gapBetweenGroups = 10;
+    var spaceForLabels = 80;
+    var spaceForLegend = 150;
 
+    // Zip the series data together (first values, second values, etc.)
+    var zippedData = [];
+
+    var sum = 0;
+
+    var sortSentiment = function (data) {
+      var sorted = [{value: 'Positive'}, {value: 'Neutral'}, {value: 'Negative'}];
+      
+      for (var i = 0; i < data.length; i++) {
+        var current = data[i];
+        if (current.value === 'positive') {
+
+          sorted[0].count = current.count;
+        } else {
+          if (current.value === 'neutral') {
+            sorted[1].count = current.count;
+          } else {
+            sorted[2].count = current.count;
+          }
+        }
+        sum += current.count;
+      }
+      return sorted;
+    };
+
+    data2.sentiment = sortSentiment(data2.sentiment);
+
+    for (var i = 0; i < data2.sentiment.length; i++) {
+      zippedData.push(data2.sentiment[i].count / sum);
+    }
+
+    // Color scale
+    var color = d3.scale.category20();
+    var chartHeight = barHeight * zippedData.length + gapBetweenGroups;
+
+    var x = d3.scale.linear()
+      .domain([0, d3.max(zippedData)])
+      .range([0, chartWidth]);
+
+    var y = d3.scale.linear()
+      .range([chartHeight + gapBetweenGroups, 0]);
+
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .tickFormat('')
+      .tickSize(0)
+      .orient('left');
+
+    // Specify the chart area and dimensions
+    var chart = d3.select('.chart')
+      .attr('width', spaceForLabels + chartWidth + spaceForLegend)
+      .attr('height', chartHeight);
+
+    // Create bars
+    var bar = chart.selectAll('g')
+      .data(zippedData)
+      .enter().append('g')
+      .attr('transform', function(d, i) {
+        return 'translate(' + spaceForLabels + ',' + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i / data.series.length))) + ')';
+      });
+
+    // Create rectangles of the correct width
+    bar.append('rect')
+      .attr('fill', function(d, i) {
+        return color(i % data.series.length);
+      })
+      .attr('class', 'bar')
+      .attr('width', x)
+      .attr('height', barHeight - 1);
+
+    // Add text label in bar
+    bar.append('text')
+      .attr('x', function(d) {
+        return x(d) - 3;
+      })
+      .attr('y', barHeight / 2)
+      .attr('fill', 'red')
+      .attr('dy', '.35em')
+      .text(function(d) {
+        return Math.floor(d * 100) + '%';
+      });
+
+    // Draw labels
+    bar.append('text')
+      .attr('class', 'label')
+      .attr('x', function(d) {
+        return -10;
+      })
+      .attr('y', groupHeight / 2)
+      .attr('dy', '.35em')
+      .text(function(d, i) {
+        if (i % data2.sentiment.length === 0) {
+          return 'Sentiments';
+        } else {
+          return '';
+        }
+      });
+
+    // chart.append('g')
+    //   .attr('class', 'y axis')
+    //   .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
+    //   .call(yAxis);
+
+    // Draw legend
+    var legendRectSize = barHeight / 3;
+    var legendSpacing = 4;
+
+    var legend = chart.selectAll('.legend')
+      .data(data2.sentiment)
+      .enter()
+      .append('g')
+      .attr('transform', function(d, i) {
+        var height = legendRectSize + legendSpacing;
+        var offset = -gapBetweenGroups / 2;
+        var horz = spaceForLabels + chartWidth + 40 - legendRectSize;
+        var vert = i * height - offset + groupHeight / 3;
+        return 'translate(' + horz + ',' + vert + ')';
+      });
+
+    legend.append('rect')
+      .attr('width', legendRectSize)
+      .attr('height', legendRectSize)
+      .style('fill', function(d, i) {
+        return color(i);
+      })
+      .style('stroke', function(d, i) {
+        return color(i);
+      });
+
+    legend.append('text')
+      .attr('class', 'legend')
+      .attr('x', legendRectSize + legendSpacing)
+      .attr('y', legendRectSize - legendSpacing)
+      .text(function(d) {
+        return d.value;
+      });
   };
 
 
