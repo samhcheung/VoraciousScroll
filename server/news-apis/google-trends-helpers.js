@@ -2,14 +2,17 @@ var googleTrends = require('google-trends-api');
 
 /************************ GOOGLE TRENDS **********************************/
 
-var hotTrends = function(res, limit, country) {  
+var hotTrends = function(res, limit, country, cb) {  
 // hotTrends pull top # of trends from specified country
   // resultLimit: Number
   // country: String, ex: 'US', default is US
   country = country || 'US';
   googleTrends.hotTrends(country)
     .then(function (response) {
-      res.send(response.slice(0, limit));
+      if (res != null) {
+          res.send(response.slice(0, limit));
+      }
+      cb(response.slice(0, limit));
     })
     .catch(function(error) {
       console.log(error, 'ERROR! WITH GOOGLE TRENDS');
@@ -17,7 +20,7 @@ var hotTrends = function(res, limit, country) {
 };
 
 
-var hotTrendsDetail = function(res, limit, country) {  
+var hotTrendsDetail = function(res, limit, country, cb) {  
 // hotTrends pull top # of trends from specified country
   // resultLimit: Number
   // country: String, ex: 'US', default is US
@@ -28,7 +31,10 @@ var hotTrendsDetail = function(res, limit, country) {
       // res.send(response.rss.channel[0].item.slice(limit));
       var results = response.rss.channel[0].item;
       var sortedResults = sortByTraffic(results);
-      res.send(sortedResults.slice(0, limit));
+      if (res != null) {
+        res.send(sortedResults.slice(0, limit));
+      }
+      cb(sortedResults.slice(0, limit));
     })
     .catch(function(error) {
       console.log(error, 'ERROR! WITH GOOGLE TRENDS');
