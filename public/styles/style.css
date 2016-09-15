@@ -376,3 +376,7 @@ div.tooltip-articles {
   width: 420px;
   height: 250px;
 }
+.analysisBox {
+  margin: 5px;
+  border: 1px solid;
+}
