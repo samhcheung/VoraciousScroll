@@ -169,9 +169,9 @@ angular.module('smartNews.timeline', [])
    * Render Donut 
    */
 
-  var renderSources = function(trends, size) {
+  var renderSources = function(trends) {
     d3.select('.sourcesSVG').remove();
-    size = size || {width: 430, height: 250};
+    size = {width: 430, height: 250};
 
     var width = size.width,
         height = size.height,
