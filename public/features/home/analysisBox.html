@@ -1,4 +1,18 @@
 <div class="analysisBox">
+  <table>
+    <tr>
+      <td>
+        <div class="trend-rank">{{$index + 1}}</div>
+      </td>
+      <td>
+        <img class="link trend-image" ng-src="{{ dummy.img }}" alt="trend image">
+      </td>
+      <td>
+        <div class="link trend-topic">{{dummy.topic}}</div>
+        <div class="trend-traffic">{{ dummy.traffic }} hits</div>
+      </td>
+    </tr>
+  </table>
   <div class="timeline" id="graph{{$index}}"></div>
   <div class="sources"></div>
   <div class="wordCloud"></div>

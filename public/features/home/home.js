@@ -13,7 +13,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
     controller: 'TopTrendsCtrl'
   };
 })
-.directive('analysisItem', function() {
+.directive('analysisItem', function($window) {
   return {
     templateUrl: 'features/home/analysisBox.html',
     link: function(scope, element, attr) {
@@ -207,26 +207,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
               .duration(250)
               .style('opacity', 0);
           });
-          // .on('click', function(d) {
-          //   var startDate = d.publishedAt.split('T')[0];
-          //   // selectedDate.startDate = new Date(startDate).toISOString();
-          //   // var endDate = new Date(startDate);
-          //   // endDate = endDate.setDate(endDate.getDate() + 1);
-          //   // selectedDate.endDate = new Date(endDate).toISOString();
-
-          //   var sdate = new Date(startDate);
-          //   var timeDiff = Math.abs(sdate.getTime() - new Date());
-          //   var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-          //   diffDays = diffDays-1;
-          //   selectedDate.startDate = "NOW-"+ diffDays + "DAYS"
-          //   diffDays = diffDays-1;
-          //   selectedDate.endDate = "NOW-"+ diffDays + "DAYS"
-          //   console.log("before",selectedDate.startDate)
-          //   console.log("after",selectedDate.endDate)
-
-
-          //   $rootScope.$broadcast('user:clickDate', selectedDate);
-          // });
 
         // add x-axis labels
         svg.append('g')
@@ -241,12 +221,212 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           .call(d3.axisLeft(y));
       };
 
+      var renderSentiment = function(data, index) {
+        var chartWidth = 300;
+        var barHeight = 50;
+        var groupHeight = barHeight * data.length;
+        var gapBetweenGroups = 10;
+        var spaceForLabels = 0; // no label to the left
+        var spaceForLegend = 150;
+
+        // Zip the series data together (first values, second values, etc.)
+        var zippedData = [];
+
+        var sum = 0;
+
+        var sortSentiment = function (data) {
+          var sorted = [{value: 'Positive'}, {value: 'Neutral'}, {value: 'Negative'}];
+          
+          for (var i = 0; i < data.length; i++) {
+            var current = data[i];
+            if (current.value === 'positive') {
+
+              sorted[0].count = current.count;
+            } else {
+              if (current.value === 'neutral') {
+                sorted[1].count = current.count;
+              } else {
+                sorted[2].count = current.count;
+              }
+            }
+            sum += current.count;
+          }
+          return sorted;
+        };
+
+        data = sortSentiment(data);
+
+        for (var i = 0; i < data.length; i++) {
+          zippedData.push(data[i].count / sum);
+        }
+
+        // Color scale
+
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
+        // var color = d3.scale.category20(); // v3
+        var chartHeight = barHeight * zippedData.length + gapBetweenGroups;
+
+        var x = d3.scaleLinear()
+          .domain([0, d3.max(zippedData)])
+          .range([0, chartWidth]);
+
+        var y = d3.scaleLinear()
+          .range([chartHeight + gapBetweenGroups, 0]);
+
+        var yAxis = d3.axisLeft(y);
+
+          // .scale(y) // v3
+          // .tickFormat('')
+          // .tickSize(0)
+          // .orient('left');
+
+        // Specify the chart area and dimensions
+        var chart = d3.selectAll('.sentiment')
+          .filter(function(d, i) {
+            return i === +index;
+          })
+          .append('svg')
+          .attr('width', spaceForLabels + chartWidth + spaceForLegend)
+          .attr('height', chartHeight);
+
+        // Create bars
+        var bar = chart.selectAll('g')
+          .data(zippedData)
+          .enter().append('g')
+          .attr('transform', function(d, i) {
+            return 'translate(' + spaceForLabels + ',' + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i / data.length))) + ')';
+          });
+
+        // Create rectangles of the correct width
+        bar.append('rect')
+          .attr('fill', function(d, i) {
+            return color(i % data.length);
+          })
+          .attr('class', 'bar')
+          .attr('width', x)
+          .attr('height', barHeight - 1);
+
+        // Add text label in bar
+        bar.append('text')
+          .attr('x', function(d) {
+            return x(d) - 50;
+          })
+          .attr('y', barHeight / 2)
+          .attr('fill', 'white')
+          .attr('dy', '.35em')
+          .text(function(d) {
+            return Math.floor(d * 100) + '%';
+          });
+
+        // Draw labels
+        // bar.append('text')
+        //   .attr('class', 'label')
+        //   .attr('x', function(d) {
+        //     return -10;
+        //   })
+        //   .attr('y', groupHeight / 2)
+        //   .attr('dy', '.35em')
+        //   .text(function(d, i) {
+        //     if (i % data.length === 0) {
+        //       return 'Sentiments';
+        //     } else {
+        //       return '';
+        //     }
+        //   });
+
+        // chart.append('g')
+        //   .attr('class', 'y axis')
+        //   .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
+        //   .call(yAxis);
+
+        // Draw legend
+        var legendRectSize = barHeight / 3;
+        var legendSpacing = 4;
+
+        var legend = chart.selectAll('.legend')
+          .data(data)
+          .enter()
+          .append('g')
+          .attr('transform', function(d, i) {
+            var height = legendRectSize + legendSpacing;
+            var offset = -gapBetweenGroups / 2;
+            var horz = spaceForLabels + chartWidth + 40 - legendRectSize;
+            var vert = i * height - offset + groupHeight / 3;
+            return 'translate(' + horz + ',' + vert + ')';
+          });
+
+        legend.append('rect')
+          .attr('width', legendRectSize)
+          .attr('height', legendRectSize)
+          .style('fill', function(d, i) {
+            return color(i);
+          })
+          .style('stroke', function(d, i) {
+            return color(i);
+          });
+
+        legend.append('text')
+          .attr('class', 'legend')
+          .attr('x', legendRectSize + legendSpacing)
+          .attr('y', legendRectSize - legendSpacing)
+          .text(function(d) {
+            return d.value;
+          });
+      };
+
+      var renderCloud = function(words, index, size) {
+        size = size || {width: 960, height: 500};
+
+        var frequency_list = words.map(function(item) {
+          return item;
+        });
+        
+        var color = $window.d3.scaleLinear()
+          .domain([0,1,2,3,4,5,6,10,15,20,100])
+          .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
+          
+        d3.layout.cloud().size([size.width - 50, size.height - 50]) // was 800x300
+          .words(frequency_list)
+          .rotate(0)
+          .fontSize(function(d) { return d.size; })
+          .on("end", draw)
+          .start();
+
+        function draw(words) {
+          d3.selectAll(".wordCloud")
+          .filter(function(d, i) {
+            return i === +index;
+          })
+
+          .append("svg")
+            .attr("width", size.width + 50) // was 850
+            .attr("height", size.height + 50) // was 350
+            .attr("class", "wordcloud")
+            .append("g")
+            // without the transform, words words would get cutoff to the left and top, they would
+            // appear outside of the SVG area
+            .attr("transform", "translate(320,200)")   // scale this?
+            .selectAll("text")
+            .data(words)
+            .enter().append("text")
+            .style("font-size", function(d) { return d.size + "px"; })
+            .style("fill", function(d, i) { return color(i); })
+            .attr("transform", function(d) {
+                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+            })
+            .text(function(d) { return d.text; });
+        }
+      };
+
 
       /////////////above are render functions
 
       attr.$observe('index', function(index) {
         renderSources(scope.dummy.sources, index);
         renderGraph(scope.dummy.timeline, index);
+        renderSentiment(scope.dummy.sentiment, index);
+        renderCloud(scope.dummy.keywords, index);
+
       });
 
 
