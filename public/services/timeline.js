@@ -108,7 +108,7 @@ angular.module('smartNews.timeline', [])
       .attr('width', width / data.length)
       .attr('height', height)
       .attr('x', function(d) {
-        return x(d.date - (width / data.length / 2));
+        return x(d.date) - (width / data.length / 2);
       })
       .attr('y', 0)
       .attr('class', 'tooltip-target')
