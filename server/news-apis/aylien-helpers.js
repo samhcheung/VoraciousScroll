@@ -36,7 +36,7 @@ var timelineData = function(input, res) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      getSources(input, res, data);
+      getSources(input, data);
 
       // res.send(data);
     }
@@ -68,7 +68,7 @@ var articleImport = function(input, res, start, end, limit) {
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, res, stories, start, end) {
+var getSources = function(input, stories, start, end) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
   stories = stories || {};

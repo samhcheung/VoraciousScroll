@@ -47,7 +47,9 @@ module.exports = function(app, express) {
   app.route('/results/:input')
     .get(function(req, res) {
       console.log('Received get on /results/:input from app.route on routes.js');
-      aylien.timelineData(req.params.input, res);
+      aylien.timelineData(req.params.input, function(results) {
+        res.send(results);
+      });
     });
 
 
