@@ -264,11 +264,16 @@ angular.module('smartNews.timeline', [])
     }
   }
 
+  var renderSentiment = function() {
+
+  };
+
 
   return {
     renderGraph: renderGraph,
     selectedDate: selectedDate,
     renderSources: renderSources,
-    renderCloud: renderCloud
+    renderCloud: renderCloud,
+    renderSentiment: renderSentiment
   };
 });
