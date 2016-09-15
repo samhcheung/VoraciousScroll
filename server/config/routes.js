@@ -48,8 +48,20 @@ module.exports = function(app, express) {
   app.route('/results/:input')
     .get(function(req, res) {
       console.log('Received get on /results/:input from app.route on routes.js');
-      aylien.timelineData(req.params.input, function(results) {
-        res.send(results);
+      var data = {};
+      var input = req.params.input;
+      aylien.timelineData(input, function(results) {
+        data.timeline = results;
+        aylien.getSources(input, function(resultSources) {
+          data.sources = resultSources;
+          aylien.getKeywords(input, function(resultKeywords) {
+            data.keywords = resultKeywords;
+            aylien.getSentiment(input, function(resultSentiment) {
+              data.sentiment = resultSentiment;
+              res.send(data);
+            });
+          });
+        });
       });
     });
 
