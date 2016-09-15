@@ -97,7 +97,7 @@ var getSources = function(input, cb, start, end) {
   });
 };
 
-var topicKeywords = function(input, start, end, cb) {
+var topicKeywords = function(input, cb, start, end) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
@@ -117,7 +117,7 @@ var topicKeywords = function(input, start, end, cb) {
   });
 };
 
-var topicSentiment = function(input, start, end, cb) {
+var topicSentiment = function(input, cb, start, end) {
   var opts = {
     'title': '"' + input + '"',
     'language': ['en'],
