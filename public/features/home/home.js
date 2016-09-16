@@ -46,9 +46,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
             return i === index;
           })
           .append("svg")
-            .attr("width", width)
-            .attr("height", height)
+            // .attr("width", width)
+            // .attr("height", height)
             .attr("class", 'sourcesSVG')
+            .attr("viewBox", "0 0 " + width + " " + height)
             .append("g")
             .attr("transform", "translate(130," + height / 2 + ")")
             .attr('class', 'donut');
@@ -101,8 +102,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
         // fixed size graph. These values are shorter than true innerWidth / innerHeight:
         var graph = document.getElementById('graph1');
-        var width = window.innerWidth - margin.left - margin.right;
-        var height = window.innerHeight * 0.5 - margin.top - margin.bottom;
+        var width = 1200;
+        var height = 200;
+        // var width = window.innerWidth - margin.left - margin.right;
+        // var height = window.innerHeight * 0.5 - margin.top - margin.bottom;
 
         // parse UTC date/time
         var parseTime = d3.timeParse('%Y-%m-%dT%H:%M:%S.%LZ');
@@ -121,12 +124,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           // responsive SVG needs these two attr's and an absence of height and width attr's
           // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
           // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-          .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + 400 )
+          .attr('viewBox', '0 0 ' + width + ' ' + (height + 40))
           // append group element
           .append('g')
           // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
-          .attr('transform', 'translate(' + ((window.innerWidth - width) / 2) + ',0)')
-          .classed("svg-content-responsive", true);
+          .attr('transform', 'translate(40, 0)');
+          // .classed("svg-content-responsive", true);
 
         // div element for tooltip
         var div = d3.selectAll('.timeline')
