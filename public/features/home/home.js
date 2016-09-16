@@ -124,7 +124,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           // responsive SVG needs these two attr's and an absence of height and width attr's
           // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
           // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-          .attr('viewBox', '0 0 ' + width + ' ' + (height + 40))
+          .attr('viewBox', '0 0 ' + (width+200) + ' ' + (height + 40))
           // append group element
           .append('g')
           // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
@@ -444,10 +444,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 })
 
 // Home Controller
-.controller('HomeCtrl', function($scope) {
+.controller('HomeCtrl', function($scope, getFrontPage) {
   $scope.test = 'Home View';
   // d3.select('.sources').remove();
-
+  $scope.front = getFrontPage;
   $scope.dummies = [
     {
   "topic": "anything",

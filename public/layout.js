@@ -24,7 +24,22 @@ angular.module('smartNews', [
       url: '/home',
       templateUrl: 'features/home/home.html',
       controller: 'HomeCtrl',
-      authenticate: false
+      authenticate: false,
+      resolve: {
+        getFrontPage : function ($http) {
+          console.log('hi')
+          return $http({
+              method: 'GET',
+              url: '/api/news/fetchData'
+            }).then(function (results) {
+              console.log(results.data.data);
+              return results.data.data;
+            });
+        
+
+
+        }
+      }
     })
 
     .state('main.results', {
