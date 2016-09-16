@@ -9,7 +9,7 @@ var hotTrends = function(res, limit, country, cb) {
   country = country || 'US';
   googleTrends.hotTrends(country)
     .then(function (response) {
-      if (res != null) {
+      if (res !== null) {
           res.send(response.slice(0, limit));
       }
       cb(response.slice(0, limit));

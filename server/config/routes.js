@@ -123,7 +123,7 @@ module.exports = function(app, express) {
           preFetch.count = 0;
           // for each topic get keywords, sentiment, sources, timeline
           for (var i = 0; i < 5; i++) {
-            preFetch.data[i].topic = preFetch.list[i].title[0];
+            // preFetch.data[i].topic = preFetch.list[i].title[0];
             preFetch.data[i].img = 'http://' + preFetch.list[i]['ht:picture'][0].slice(2);
             preFetch.data[i].traffic = preFetch.list[i]['ht:approx_traffic'][0]
             aylien.getAnalysis(preFetch.data[i], list[i].title[0], function (data) {
