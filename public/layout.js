@@ -24,7 +24,25 @@ angular.module('smartNews', [
       url: '/home',
       templateUrl: 'features/home/home.html',
       controller: 'HomeCtrl',
-      authenticate: false
+      authenticate: false,
+      resolve: {
+        getFrontPage : function ($http) {
+          console.log('hi')
+          return $http({
+              method: 'GET',
+              url: '/api/news/fetchData'
+            }).then(function (results) {
+              for(var i = 0; i < results.data.data.length; i++){
+                //Trim keywords to top 20 for wordCloud sizing/spacing
+                results.data.data[i].keywords = results.data.data[i].keywords.slice(0,20);
+              }
+              return results.data.data;
+            });
+        
+
+
+        }
+      }
     })
 
     .state('main.results', {
@@ -66,7 +84,7 @@ angular.module('smartNews', [
   };
 })
 
-.controller('SearchCtrl', function($scope, $state, $http, renderGraph){
+.controller('SearchCtrl', function($scope, $state, $http, renderGraph, $rootScope){
   $scope.searchinput = '';
 
   $scope.getDropdown = function(val){
@@ -87,7 +105,11 @@ angular.module('smartNews', [
     });
   };
 
-  $scope.renderView = function() {
+  $scope.renderView = function(topic) {
+    //let renderView take in the topic when called from home scope
+    if(topic !== undefined) {
+      $scope.searchinput = topic;
+    }
     var url = '/results/' + $scope.searchinput;
     if ($scope.searchinput) {
       $http({
@@ -114,5 +136,7 @@ angular.module('smartNews', [
       $state.go('main.home');
     }
   };
+  //Pass the renderView function to rootScope
+  $rootScope.renderView = $scope.renderView;
 
 });

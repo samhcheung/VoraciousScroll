@@ -124,7 +124,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           // responsive SVG needs these two attr's and an absence of height and width attr's
           // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
           // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-          .attr('viewBox', '0 0 ' + width + ' ' + (height + 40))
+          .attr('viewBox', '0 0 ' + (width+200) + ' ' + (height + 40))
           // append group element
           .append('g')
           // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
@@ -191,25 +191,25 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           })
           .attr('y', 0)
           .attr('class', 'tooltip-target')
-          .on('mouseover', function(d) {
-            d3.select(this)
-              .classed('tooltip-target-on', true);
-            div.transition()
-              .duration(100)
-              .style('opacity', 0.75);
-            div.html(
-                '<span class="tooltip-date">' + moment(d.date).format("MM/DD/YYYY") + '<br/>' + '<span class="tooltip-value">' + d.value + ' articles'
-              )
-              .style('left', (d3.event.pageX) + 'px')
-              .style('top', (d3.event.pageY - 28) + 'px');
-          })
-          .on('mouseout', function(d) {
-            d3.select(this)
-              .classed('tooltip-target-on', false);
-            div.transition()
-              .duration(250)
-              .style('opacity', 0);
-          });
+          // .on('mouseover', function(d) {
+          //   d3.select(this)
+          //     .classed('tooltip-target-on', true);
+          //   div.transition()
+          //     .duration(100)
+          //     .style('opacity', 0.75);
+          //   div.html(
+          //       '<span class="tooltip-date">' + moment(d.date).format("MM/DD/YYYY") + '<br/>' + '<span class="tooltip-value">' + d.value + ' articles'
+          //     )
+          //     .style('left', (d3.event.pageX) + 'px')
+          //     .style('top', (d3.event.pageY - 28) + 'px');
+          // })
+          // .on('mouseout', function(d) {
+          //   d3.select(this)
+          //     .classed('tooltip-target-on', false);
+          //   div.transition()
+          //     .duration(250)
+          //     .style('opacity', 0);
+          // });
 
         // add x-axis labels
         svg.append('g')
@@ -444,10 +444,17 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 })
 
 // Home Controller
-.controller('HomeCtrl', function($scope) {
+.controller('HomeCtrl', function($scope, getFrontPage, $rootScope) {
   $scope.test = 'Home View';
   // d3.select('.sources').remove();
 
+  //Calls the renderView function with the given topic.
+  //We needed to pull the searchCtrl's renderView to $rootScope and also let it accept a parameter
+  $scope.rendView = function (topic) {
+    $rootScope.renderView(topic);
+  }
+  //getFrontPage is from the resolve of loading this template and homectrl
+  $scope.front = getFrontPage;
   $scope.dummies = [
     {
   "topic": "anything",
