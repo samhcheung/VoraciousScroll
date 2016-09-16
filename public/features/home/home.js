@@ -46,9 +46,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
             return i === index;
           })
           .append("svg")
-            .attr("width", width)
-            .attr("height", height)
+            // .attr("width", width)
+            // .attr("height", height)
             .attr("class", 'sourcesSVG')
+            .attr("viewBox", "0 0 " + width + " " + height)
             .append("g")
             .attr("transform", "translate(130," + height / 2 + ")")
             .attr('class', 'donut');
@@ -101,8 +102,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
         // fixed size graph. These values are shorter than true innerWidth / innerHeight:
         var graph = document.getElementById('graph1');
-        var width = window.innerWidth - margin.left - margin.right;
-        var height = window.innerHeight * 0.5 - margin.top - margin.bottom;
+        var width = 1200;
+        var height = 200;
+        // var width = window.innerWidth - margin.left - margin.right;
+        // var height = window.innerHeight * 0.5 - margin.top - margin.bottom;
 
         // parse UTC date/time
         var parseTime = d3.timeParse('%Y-%m-%dT%H:%M:%S.%LZ');
@@ -121,12 +124,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           // responsive SVG needs these two attr's and an absence of height and width attr's
           // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
           // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-          .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + 400 )
+          .attr('viewBox', '0 0 ' + width + ' ' + (height + 40))
           // append group element
           .append('g')
           // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
-          .attr('transform', 'translate(' + ((window.innerWidth - width) / 2) + ',0)')
-          .classed("svg-content-responsive", true);
+          .attr('transform', 'translate(40, 0)');
+          // .classed("svg-content-responsive", true);
 
         // div element for tooltip
         var div = d3.selectAll('.timeline')
@@ -286,8 +289,9 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
             return i === +index;
           })
           .append('svg')
-          .attr('width', spaceForLabels + chartWidth + spaceForLegend)
-          .attr('height', chartHeight);
+          // .attr('width', spaceForLabels + chartWidth + spaceForLegend)
+          // .attr('height', chartHeight);
+          .attr('viewBox', '0 0 ' + (spaceForLabels + chartWidth + spaceForLegend) + ' ' + chartHeight);
 
         // Create bars
         var bar = chart.selectAll('g')
@@ -382,8 +386,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           return accum + item.count;
         }, 0);
 
-        console.log(total)
-
         var color = $window.d3.scaleLinear()
           .domain([0,1,2,3,4,5,6,10,15,20,100])
           .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
@@ -402,8 +404,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           })
 
           .append("svg")
-            .attr("width", size.width /2) // was 850
-            .attr("height", size.height /2) // was 350
+            // .attr("width", size.width /2) // was 850
+            // .attr("height", size.height /2) // was 350
+            .attr('viewBox', '0 0 ' + (size.width/2) + ' ' + (size.height/2))
+
             .attr("class", "wordcloud")
             .append("g")
             // without the transform, words words would get cutoff to the left and top, they would
