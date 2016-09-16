@@ -444,9 +444,14 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 })
 
 // Home Controller
-.controller('HomeCtrl', function($scope, getFrontPage) {
+.controller('HomeCtrl', function($scope, getFrontPage, $rootScope) {
   $scope.test = 'Home View';
   // d3.select('.sources').remove();
+  console.log($rootScope.renderView)
+  $scope.rendView = function (topic) {
+    console.log('clicked');
+    $rootScope.renderView(topic);
+  }
   $scope.front = getFrontPage;
   $scope.dummies = [
     {

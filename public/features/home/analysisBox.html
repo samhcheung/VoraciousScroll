@@ -2,7 +2,7 @@
           <div class="trend-rank">{{$index + 1}}</div>
   <div class="row">
     <div class="col-xs-2">
-      <div class="link trend-topic">{{dummy.topic}}</div>
+      <div class="link trend-topic" ng-click="rendView(dummy.topic)">{{dummy.topic}}</div>
       <div class="trend-traffic">{{ dummy.traffic }} hits</div>
       <img class="trend-image img-responsive" ng-src="{{ dummy.img }}" alt="trend image">
     </div>
