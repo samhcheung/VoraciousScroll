@@ -6,6 +6,8 @@ var googleTrends = require('../news-apis/google-trends-helpers.js');
 var request = require('request');
 var db = require('./db.controller.js');
 var path = require('path');
+var async = require('async');
+var memStore = require('../db/memStore');
 
 var preFetch = {
     'date': '',
@@ -86,6 +88,24 @@ module.exports = function(app, express) {
 
   app.route('/api/news/fetchData')
     .get(function(req, res) {
+      if (memStore) {
+        res.send(memStore);
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       var current = new Date();
       // get trends, then data
       /* check date within the hour
