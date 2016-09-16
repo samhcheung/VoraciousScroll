@@ -15,7 +15,7 @@ app_id.apiKey = aylienKeys.app_id;
 var app_key = api.apiClient.authentications['app_key'];
 app_key.apiKey = aylienKeys.app_key;
 
-var timelineData = function(input, cb, acb) {
+var timelineData = function(input, cb) {
 
   // more options here: https://newsapi.aylien.com/docs/endpoints/time_series/nodejs
   // date/time formatting: https://newsapi.aylien.com/docs/working-with-dates
@@ -47,8 +47,7 @@ var timelineData = function(input, cb, acb) {
       //     });
       //   });
       // });
-      cb(data);
-      acb();
+      cb(null, data);
     }
   });
 };
@@ -78,7 +77,7 @@ var articleImport = function(input, res, start, end, limit) {
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, start, end, cb, acb) {
+var getSources = function(input, start, end, cb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
   // stories = stories || {};
@@ -99,13 +98,12 @@ var getSources = function(input, start, end, cb, acb) {
       console.log('sources returned successfully: ' + data);
       // console.log( data.trends.slice(0, 4));
       var sources = data.trends.slice(0, 10);
-      cb(sources);
-      acb();
+      cb(null, sources);
     }
   });
 };
 
-var getKeywords = function(input, start, end, cb, acb) {
+var getKeywords = function(input, start, end, cb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
@@ -115,7 +113,7 @@ var getKeywords = function(input, start, end, cb, acb) {
     'sortBy': 'relevance',
     'publishedAtStart': start,
     'publishedAtEnd': end,
-    'perPage': 50,
+    'perPage': 100,
     'field': 'keywords'
   };
 
@@ -123,12 +121,11 @@ var getKeywords = function(input, start, end, cb, acb) {
     if (err) { throw err; }
     console.log('keywords returned successfully: ' + data);
     var keywords = data.trends;
-    cb(keywords);
-    acb();
+    cb(null, keywords);
   });
 };
 
-var getSentiment = function(input, start, end, cb, acb) {
+var getSentiment = function(input, start, end, cb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
@@ -138,7 +135,7 @@ var getSentiment = function(input, start, end, cb, acb) {
     'publishedAtStart': start,
     'publishedAtEnd': end,
     'sortBy': 'relevance',
-    'perPage': 50,
+    'perPage': 100,
     'field': 'sentiment.body.polarity'
   };
 
@@ -146,41 +143,29 @@ var getSentiment = function(input, start, end, cb, acb) {
     if (err) { throw err; }
     console.log('sentiment returned successfully: ' + data);
     var sentiment = data.trends;
-    cb(sentiment);
-    acb();
+    cb(null, sentiment);
   });
 };
 
 var getAnalysis = function(data, input, start, end, cb) {
-  // currently not asynchronous
-  // timelineData(input, function(resultTimeline) {
-  //   data.timeline = resultTimeline;
-  //   getSources(input, function(resultSources) {
-  //     data.sources = resultSources;
-  //     getKeywords(input, function(resultKeywords) {
-  //       data.keywords = resultKeywords;
-  //       getSentiment(input, function(resultSentiment) {
-  //         data.sentiment = resultSentiment;
-  //         cb(data);
-  //       });
-  //     });
-  //   });
-  // });
-  console.log(data, input, start, end, cb);
-  async.parallel([
-    function(acb) {
-      timelineData(input, function(resultTimeline) { data.timeline = resultTimeline; }, acb);
+  data.topic = input;
+  async.parallel({
+    timeline: function(callback) {
+      timelineData(input, callback);
     },
-    function(acb) {
-      getSources(input, null, null, function(resultSources) { data.sources = resultSources; }, acb);
+    sources: function(callback) {
+      getSources(input, start, end, callback);
     },
-    function(acb) {
-      getKeywords(input, null, null, function(resultKeywords) { data.keywords = resultKeywords; }, acb);
+    keywords: function(callback) {
+      getKeywords(input, start, end, callback);
     },
-    function(acb) {
-      getSentiment(input, null, null, function(resultSentiment) { data.sentiment = resultSentiment; }, acb);
+    sentiment: function(callback) {
+      getSentiment(input, start, end, callback);
     }
-  ], function(err) {
+  }, function(err, results) {
+    for (var key in results) {
+      data[key] = results[key];
+    }
     cb(data);
   });
 };
