@@ -92,56 +92,42 @@ module.exports = function(app, express) {
         res.send(memStore);
       }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      var current = new Date();
-      // get trends, then data
-      /* check date within the hour
-      var twohoursago = new Date(current.getTime() - 2*(1000*60*60));
-      var last = preFetch.date || twohoursago;
-      var hourDiff = Math.abs(current.getTime() - last.getTime()) / 3600000;
-      */
-      var hourDiff = 1;
-      if (hourDiff === 0) {
-         res.send(preFetch);
-      } else {
-        googleTrends.hotTrendsDetail(null, 5, 'US', function(list) {
-          preFetch.list = list;
-          preFetch.date = current;
-          preFetch.count = 0;
-          // for each topic get keywords, sentiment, sources, timeline
-          for (var i = 0; i < 5; i++) {
-            // preFetch.data[i].topic = preFetch.list[i].title[0];
-            preFetch.data[i].img = 'http://' + preFetch.list[i]['ht:picture'][0].slice(2);
-            preFetch.data[i].traffic = preFetch.list[i]['ht:approx_traffic'][0]
-            aylien.getAnalysis(preFetch.data[i], list[i].title[0], function (data) {
-              //back from getAnalysis - preFetch is populated(?)
-              preFetch.count = preFetch.count + 1;
-            });
-          }
-        });
-        // wait for done
-        var waitForIt = setInterval(function() {
-          // Do something every 10 seconds
-          if (preFetch.count === 5) {
-            clearInterval(waitForIt);
-            preFetch.count = 0; //send only once
-            res.send(preFetch);
-          }
-        }, 5000);
-      }
+      // var current = new Date();
+      // // get trends, then data
+      // /* check date within the hour
+      // var twohoursago = new Date(current.getTime() - 2*(1000*60*60));
+      // var last = preFetch.date || twohoursago;
+      // var hourDiff = Math.abs(current.getTime() - last.getTime()) / 3600000;
+      // */
+      // var hourDiff = 1;
+      // if (hourDiff === 0) {
+      //    res.send(preFetch);
+      // } else {
+      //   googleTrends.hotTrendsDetail(null, 5, 'US', function(list) {
+      //     preFetch.list = list;
+      //     preFetch.date = current;
+      //     preFetch.count = 0;
+      //     // for each topic get keywords, sentiment, sources, timeline
+      //     for (var i = 0; i < 5; i++) {
+      //       // preFetch.data[i].topic = preFetch.list[i].title[0];
+      //       preFetch.data[i].img = 'http://' + preFetch.list[i]['ht:picture'][0].slice(2);
+      //       preFetch.data[i].traffic = preFetch.list[i]['ht:approx_traffic'][0]
+      //       aylien.getAnalysis(preFetch.data[i], list[i].title[0], function (data) {
+      //         //back from getAnalysis - preFetch is populated(?)
+      //         preFetch.count = preFetch.count + 1;
+      //       });
+      //     }
+      //   });
+      //   // wait for done
+      //   var waitForIt = setInterval(function() {
+      //     // Do something every 10 seconds
+      //     if (preFetch.count === 5) {
+      //       clearInterval(waitForIt);
+      //       preFetch.count = 0; //send only once
+      //       res.send(preFetch);
+      //     }
+      //   }, 5000);
+      // }
     });
 
   /************************ SAVE ARTICLE **********************************/
