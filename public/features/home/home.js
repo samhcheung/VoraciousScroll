@@ -265,7 +265,9 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
         // Color scale
 
-        var color = d3.scaleOrdinal(d3.schemeCategory20);
+        // var color = d3.scaleOrdinal(d3.schemeCategory20);
+        var color = d3.scaleOrdinal()
+        .range(['#70C1B3', '#FFE066', '#F25F5C']);
         // var color = d3.scale.category20(); // v3
         var chartHeight = barHeight * zippedData.length + gapBetweenGroups;
 
@@ -313,7 +315,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
         // Add text label in bar
         bar.append('text')
           .attr('x', function(d) {
-            return x(d) - 50;
+            return x(d) - 10;
           })
           .attr('y', barHeight / 2)
           .attr('fill', 'white')
