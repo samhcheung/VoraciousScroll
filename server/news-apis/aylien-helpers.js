@@ -163,6 +163,7 @@ var getAnalysis = function(data, input, start, end, cb) {
       getSentiment(input, start, end, callback);
     }
   }, function(err, results) {
+    if (err) { throw err; }
     for (var key in results) {
       data[key] = results[key];
     }
