@@ -15,7 +15,7 @@ app_id.apiKey = aylienKeys.app_id;
 var app_key = api.apiClient.authentications['app_key'];
 app_key.apiKey = aylienKeys.app_key;
 
-var timelineData = function(input, cb) {
+var timelineData = function(input, cb, acb) {
 
   // more options here: https://newsapi.aylien.com/docs/endpoints/time_series/nodejs
   // date/time formatting: https://newsapi.aylien.com/docs/working-with-dates
@@ -48,6 +48,7 @@ var timelineData = function(input, cb) {
       //   });
       // });
       cb(data);
+      acb();
     }
   });
 };
@@ -77,7 +78,7 @@ var articleImport = function(input, res, start, end, limit) {
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, cb, start, end) {
+var getSources = function(input, start, end, cb, acb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
   // stories = stories || {};
@@ -99,11 +100,12 @@ var getSources = function(input, cb, start, end) {
       // console.log( data.trends.slice(0, 4));
       var sources = data.trends.slice(0, 10);
       cb(sources);
+      acb();
     }
   });
 };
 
-var getKeywords = function(input, cb, start, end) {
+var getKeywords = function(input, start, end, cb, acb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
@@ -113,18 +115,20 @@ var getKeywords = function(input, cb, start, end) {
     'sortBy': 'relevance',
     'publishedAtStart': start,
     'publishedAtEnd': end,
-    'perPage': 100,
+    'perPage': 50,
     'field': 'keywords'
   };
 
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
+    console.log('keywords returned successfully: ' + data);
     var keywords = data.trends;
     cb(keywords);
+    acb();
   });
 };
 
-var getSentiment = function(input, cb, start, end) {
+var getSentiment = function(input, start, end, cb, acb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
@@ -134,31 +138,50 @@ var getSentiment = function(input, cb, start, end) {
     'publishedAtStart': start,
     'publishedAtEnd': end,
     'sortBy': 'relevance',
-    'perPage': 100,
+    'perPage': 50,
     'field': 'sentiment.body.polarity'
   };
 
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
+    console.log('sentiment returned successfully: ' + data);
     var sentiment = data.trends;
     cb(sentiment);
+    acb();
   });
 };
 
-var getAnalysis = function(data, input, cb) {
+var getAnalysis = function(data, input, start, end, cb) {
   // currently not asynchronous
-  timelineData(input, function(resultTimeline) {
-    data.timeline = resultTimeline;
-    getSources(input, function(resultSources) {
-      data.sources = resultSources;
-      getKeywords(input, function(resultKeywords) {
-        data.keywords = resultKeywords;
-        getSentiment(input, function(resultSentiment) {
-          data.sentiment = resultSentiment;
-          cb(data);
-        });
-      });
-    });
+  // timelineData(input, function(resultTimeline) {
+  //   data.timeline = resultTimeline;
+  //   getSources(input, function(resultSources) {
+  //     data.sources = resultSources;
+  //     getKeywords(input, function(resultKeywords) {
+  //       data.keywords = resultKeywords;
+  //       getSentiment(input, function(resultSentiment) {
+  //         data.sentiment = resultSentiment;
+  //         cb(data);
+  //       });
+  //     });
+  //   });
+  // });
+  console.log(data, input, start, end, cb);
+  async.parallel([
+    function(acb) {
+      timelineData(input, function(resultTimeline) { data.timeline = resultTimeline; }, acb);
+    },
+    function(acb) {
+      getSources(input, null, null, function(resultSources) { data.sources = resultSources; }, acb);
+    },
+    function(acb) {
+      getKeywords(input, null, null, function(resultKeywords) { data.keywords = resultKeywords; }, acb);
+    },
+    function(acb) {
+      getSentiment(input, null, null, function(resultSentiment) { data.sentiment = resultSentiment; }, acb);
+    }
+  ], function(err) {
+    cb(data);
   });
 };
 

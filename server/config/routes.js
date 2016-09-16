@@ -55,7 +55,7 @@ module.exports = function(app, express) {
       console.log('Received get on /results/:input from app.route on routes.js');
       var data = {};
       var input = req.params.input;
-      aylien.getAnalysis(data, input, function() {
+      aylien.getAnalysis(data, input, null, null, function() {
         res.send(data);
       });
     });
