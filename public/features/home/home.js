@@ -447,11 +447,13 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 .controller('HomeCtrl', function($scope, getFrontPage, $rootScope) {
   $scope.test = 'Home View';
   // d3.select('.sources').remove();
-  console.log($rootScope.renderView)
+
+  //Calls the renderView function with the given topic.
+  //We needed to pull the searchCtrl's renderView to $rootScope and also let it accept a parameter
   $scope.rendView = function (topic) {
-    console.log('clicked');
     $rootScope.renderView(topic);
   }
+  //getFrontPage is from the resolve of loading this template and homectrl
   $scope.front = getFrontPage;
   $scope.dummies = [
     {
