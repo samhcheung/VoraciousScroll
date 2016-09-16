@@ -289,8 +289,9 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
             return i === +index;
           })
           .append('svg')
-          .attr('width', spaceForLabels + chartWidth + spaceForLegend)
-          .attr('height', chartHeight);
+          // .attr('width', spaceForLabels + chartWidth + spaceForLegend)
+          // .attr('height', chartHeight);
+          .attr('viewBox', '0 0 ' + (spaceForLabels + chartWidth + spaceForLegend) + ' ' + chartHeight);
 
         // Create bars
         var bar = chart.selectAll('g')
@@ -385,8 +386,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           return accum + item.count;
         }, 0);
 
-        console.log(total)
-
         var color = $window.d3.scaleLinear()
           .domain([0,1,2,3,4,5,6,10,15,20,100])
           .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
@@ -405,8 +404,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           })
 
           .append("svg")
-            .attr("width", size.width /2) // was 850
-            .attr("height", size.height /2) // was 350
+            // .attr("width", size.width /2) // was 850
+            // .attr("height", size.height /2) // was 350
+            .attr('viewBox', '0 0 ' + (size.width/2) + ' ' + (size.height/2))
+
             .attr("class", "wordcloud")
             .append("g")
             // without the transform, words words would get cutoff to the left and top, they would
