@@ -33,12 +33,9 @@ var timelineData = function(input, cb) {
   };
 
   api.listTimeSeries(opts, function(err, data) {
-    if (err) {
-      console.log('<------ERROR--------->', err);
-    } else {
-      console.log('API called successfully. Returned data: ' + data);
-      cb(null, data);
-    }
+    if (err) { throw err; }
+    console.log('TimeSeries returned successfully: ' + data);
+    cb(null, data);
   });
 };
 
@@ -55,12 +52,9 @@ var articleImport = function(input, res, start, end, limit) {
   };
 
   api.listStories(opts, function(err, data) {
-    if (err) {
-      console.log('<------ERROR--------->', err);
-    } else {
-      console.log('API called successfully. Returned data: ' + data);
-      res.send(data);
-    }
+    if (err) { throw err; }
+    console.log('Stories returned successfully: ' + data);
+    res.send(data);
   });
 
 };
@@ -85,7 +79,7 @@ var getSources = function(input, start, end, cb) {
     if (err) {
       console.log('error getting sources', err);
     } else {
-      console.log('sources returned successfully: ' + data);
+      console.log('Sources returned successfully: ' + data);
       // console.log( data.trends.slice(0, 4));
       var sources = data.trends.slice(0, 10);
       cb(null, sources);
@@ -109,7 +103,7 @@ var getKeywords = function(input, start, end, cb) {
 
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    console.log('keywords returned successfully: ' + data);
+    console.log('Keywords returned successfully: ' + data);
     var keywords = data.trends;
     cb(null, keywords);
   });
@@ -131,7 +125,7 @@ var getSentiment = function(input, start, end, cb) {
 
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
-    console.log('sentiment returned successfully: ' + data);
+    console.log('Sentiment returned successfully: ' + data);
     var sentiment = data.trends;
     cb(null, sentiment);
   });
