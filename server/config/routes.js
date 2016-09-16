@@ -6,7 +6,6 @@ var googleTrends = require('../news-apis/google-trends-helpers.js');
 var request = require('request');
 var db = require('./db.controller.js');
 var path = require('path');
-var async = require('async');
 
 var preFetch = {
     'date': '',
@@ -56,8 +55,8 @@ module.exports = function(app, express) {
       console.log('Received get on /results/:input from app.route on routes.js');
       var data = {};
       var input = req.params.input;
-      aylien.getAnalysis(data, input, function() {
-        res.send(data);
+      aylien.getAnalysis(data, input, null, null, function(result) {
+        res.send(result);
       });
     });
 

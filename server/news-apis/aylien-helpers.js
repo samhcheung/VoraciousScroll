@@ -1,5 +1,6 @@
 var aylienKeys = require('../../keys.js').aylien;
 var AylienNewsApi = require('aylien-news-api');
+var async = require('async');
 
 /************* AYLIEN API HELPERS ********************/
 
@@ -32,22 +33,9 @@ var timelineData = function(input, cb) {
   };
 
   api.listTimeSeries(opts, function(err, data) {
-    if (err) {
-      console.log('<------ERROR--------->', err);
-    } else {
-      console.log('API called successfully. Returned data: ' + data);
-      // getSources(input, function(resultSources) {
-      //   data.sources = resultSources;
-      //   getKeywords(input, function(resultKeywords) {
-      //     data.keywords = resultKeywords;
-      //     getSentiment(input, function(resultSentiment) {
-      //       data.sentiment = resultSentiment;
-      //       cb(data);
-      //     });
-      //   });
-      // });
-      cb(data);
-    }
+    if (err) { throw err; }
+    console.log('TimeSeries returned successfully: ' + data);
+    cb(null, data);
   });
 };
 
@@ -64,19 +52,16 @@ var articleImport = function(input, res, start, end, limit) {
   };
 
   api.listStories(opts, function(err, data) {
-    if (err) {
-      console.log('<------ERROR--------->', err);
-    } else {
-      console.log('API called successfully. Returned data: ' + data);
-      res.send(data);
-    }
+    if (err) { throw err; }
+    console.log('Stories returned successfully: ' + data);
+    res.send(data);
   });
 
 };
 
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
-var getSources = function(input, cb, start, end) {
+var getSources = function(input, start, end, cb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
   // stories = stories || {};
@@ -94,15 +79,15 @@ var getSources = function(input, cb, start, end) {
     if (err) {
       console.log('error getting sources', err);
     } else {
-      console.log('sources returned successfully: ' + data);
+      console.log('Sources returned successfully: ' + data);
       // console.log( data.trends.slice(0, 4));
       var sources = data.trends.slice(0, 10);
-      cb(sources);
+      cb(null, sources);
     }
   });
 };
 
-var getKeywords = function(input, cb, start, end) {
+var getKeywords = function(input, start, end, cb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
@@ -118,12 +103,13 @@ var getKeywords = function(input, cb, start, end) {
 
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
+    console.log('Keywords returned successfully: ' + data);
     var keywords = data.trends;
-    cb(keywords);
+    cb(null, keywords);
   });
 };
 
-var getSentiment = function(input, cb, start, end) {
+var getSentiment = function(input, start, end, cb) {
   start = start || 'NOW-175DAYS';
   end = end || 'NOW';
 
@@ -139,33 +125,38 @@ var getSentiment = function(input, cb, start, end) {
 
   api.listTrends(opts, function(err, data) {
     if (err) { throw err; }
+    console.log('Sentiment returned successfully: ' + data);
     var sentiment = data.trends;
-    cb(sentiment);
+    cb(null, sentiment);
   });
 };
 
-var getAnalysis = function(data, input, cb) {
-  // currently not asynchronous
-  timelineData(input, function(resultTimeline) {
-    data.timeline = resultTimeline;
-    getSources(input, function(resultSources) {
-      data.sources = resultSources;
-      getKeywords(input, function(resultKeywords) {
-        data.keywords = resultKeywords;
-        getSentiment(input, function(resultSentiment) {
-          data.sentiment = resultSentiment;
-          cb(data);
-        });
-      });
-    });
+var getAnalysis = function(data, input, start, end, cb) {
+  data.topic = input;
+  async.parallel({
+    timeline: function(callback) {
+      timelineData(input, callback);
+    },
+    sources: function(callback) {
+      getSources(input, start, end, callback);
+    },
+    keywords: function(callback) {
+      getKeywords(input, start, end, callback);
+    },
+    sentiment: function(callback) {
+      getSentiment(input, start, end, callback);
+    }
+  }, function(err, results) {
+    if (err) { throw err; }
+    for (var key in results) {
+      data[key] = results[key];
+    }
+    cb(data);
   });
 };
 
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
-  // getSources: getSources,
-  // getKeywords: getKeywords,
-  // getSentiment: getSentiment,
   getAnalysis: getAnalysis
 };
