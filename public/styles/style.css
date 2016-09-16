@@ -380,3 +380,20 @@ div.tooltip-articles {
   margin: 5px;
   border: 1px solid;
 }
+
+.sentiment .legend {
+  fill: black;
+  font: 14px sans-serif;
+  text-anchor: start;
+  font-size: 12px;
+}
+
+.sentiment text {
+  fill: black;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.bar:hover {
+  fill: #247BA0;
+}
