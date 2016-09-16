@@ -18,6 +18,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
     templateUrl: 'features/home/analysisBox.html',
     link: function(scope, element, attr) {
 
+
       var renderSources = function(trends, index) {
         d3.selectAll(".sources")
           .filter(function(d, i) {
