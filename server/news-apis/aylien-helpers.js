@@ -37,16 +37,6 @@ var timelineData = function(input, cb) {
       console.log('<------ERROR--------->', err);
     } else {
       console.log('API called successfully. Returned data: ' + data);
-      // getSources(input, function(resultSources) {
-      //   data.sources = resultSources;
-      //   getKeywords(input, function(resultKeywords) {
-      //     data.keywords = resultKeywords;
-      //     getSentiment(input, function(resultSentiment) {
-      //       data.sentiment = resultSentiment;
-      //       cb(data);
-      //     });
-      //   });
-      // });
       cb(null, data);
     }
   });
@@ -174,8 +164,5 @@ var getAnalysis = function(data, input, start, end, cb) {
 module.exports = {
   timelineData: timelineData,
   articleImport: articleImport,
-  // getSources: getSources,
-  // getKeywords: getKeywords,
-  // getSentiment: getSentiment,
   getAnalysis: getAnalysis
 };
