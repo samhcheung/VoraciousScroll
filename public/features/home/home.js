@@ -191,25 +191,25 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           })
           .attr('y', 0)
           .attr('class', 'tooltip-target')
-          .on('mouseover', function(d) {
-            d3.select(this)
-              .classed('tooltip-target-on', true);
-            div.transition()
-              .duration(100)
-              .style('opacity', 0.75);
-            div.html(
-                '<span class="tooltip-date">' + moment(d.date).format("MM/DD/YYYY") + '<br/>' + '<span class="tooltip-value">' + d.value + ' articles'
-              )
-              .style('left', (d3.event.pageX) + 'px')
-              .style('top', (d3.event.pageY - 28) + 'px');
-          })
-          .on('mouseout', function(d) {
-            d3.select(this)
-              .classed('tooltip-target-on', false);
-            div.transition()
-              .duration(250)
-              .style('opacity', 0);
-          });
+          // .on('mouseover', function(d) {
+          //   d3.select(this)
+          //     .classed('tooltip-target-on', true);
+          //   div.transition()
+          //     .duration(100)
+          //     .style('opacity', 0.75);
+          //   div.html(
+          //       '<span class="tooltip-date">' + moment(d.date).format("MM/DD/YYYY") + '<br/>' + '<span class="tooltip-value">' + d.value + ' articles'
+          //     )
+          //     .style('left', (d3.event.pageX) + 'px')
+          //     .style('top', (d3.event.pageY - 28) + 'px');
+          // })
+          // .on('mouseout', function(d) {
+          //   d3.select(this)
+          //     .classed('tooltip-target-on', false);
+          //   div.transition()
+          //     .duration(250)
+          //     .style('opacity', 0);
+          // });
 
         // add x-axis labels
         svg.append('g')
