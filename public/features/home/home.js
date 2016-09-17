@@ -288,10 +288,8 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
         // Color scale
 
-        // var color = d3.scaleOrdinal(d3.schemeCategory20);
         var color = d3.scaleOrdinal()
         .range(['#70C1B3', '#FFE066', '#F25F5C']);
-        // var color = d3.scale.category20(); // v3
         var chartHeight = barHeight * zippedData.length + gapBetweenGroups;
 
         var x = d3.scaleLinear()
@@ -302,11 +300,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           .range([chartHeight + gapBetweenGroups, 0]);
 
         var yAxis = d3.axisLeft(y);
-
-          // .scale(y) // v3
-          // .tickFormat('')
-          // .tickSize(0)
-          // .orient('left');
 
         // Specify the chart area and dimensions
         var chart = d3.selectAll('.sentiment')
@@ -346,27 +339,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           .text(function(d) {
             return Math.floor(d * 100) + '%';
           });
-
-        // Draw labels
-        // bar.append('text')
-        //   .attr('class', 'label')
-        //   .attr('x', function(d) {
-        //     return -10;
-        //   })
-        //   .attr('y', groupHeight / 2)
-        //   .attr('dy', '.35em')
-        //   .text(function(d, i) {
-        //     if (i % data.length === 0) {
-        //       return 'Sentiments';
-        //     } else {
-        //       return '';
-        //     }
-        //   });
-
-        // chart.append('g')
-        //   .attr('class', 'y axis')
-        //   .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
-        //   .call(yAxis);
 
         // Draw legend
         var legendRectSize = barHeight / 3;
