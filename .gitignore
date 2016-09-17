@@ -16,3 +16,6 @@ npm-debug.log
 
 # Api Keys
 keys.js
+
+# deployment
+dist

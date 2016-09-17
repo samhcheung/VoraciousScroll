@@ -6,9 +6,6 @@ var async = require('async');
 module.exports = prefetchWorker = function() {
   googleTrends.hotTrendsDetail(null, 5, 'US', function(list) {
     memStore.list = list;
-    // memStore.date = current;
-    // memStore.count = 0;
-    console.log(memStore);
     
     async.parallel({
       one: function(callback) {
@@ -37,23 +34,13 @@ module.exports = prefetchWorker = function() {
         aylien.getAnalysis(memStore.data[4], list[4].title[0], null, null, callback);
       }
     }, function(err, results) {
-      console.log(results, 'asyncresults');
+      if (err) {
+        console.log('worker error: ', err);
+      } else {
+        console.log('worker finished');
+      }
     });
-
-
-    // // for each topic get keywords, sentiment, sources, timeline
-    // for (var i = 0; i < 5; i++) {
-    //   // memStore.data[i].topic = memStore.list[i].title[0];
-    //   memStore.data[i].img = 'http://' + memStore.list[i]['ht:picture'][0].slice(2);
-    //   memStore.data[i].traffic = memStore.list[i]['ht:approx_traffic'][0];
-    //   aylien.getAnalysis(memStore.data[i], list[i].title[0], function (data) {
-    //     //back from getAnalysis - memStore is populated(?)
-    //     memStore.count = memStore.count + 1;
-    //   });
-    
   });
-
-  // get new data each hour
 
   
 };
