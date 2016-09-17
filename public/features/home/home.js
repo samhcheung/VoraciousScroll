@@ -20,10 +20,17 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
 
       var renderSources = function(trends, index) {
-        d3.selectAll(".sources")
+        // d3.selectAll(".sources")
+        //   .filter(function(d, i) {
+        //     return i === index;
+        //   }).remove();
+
+        //Remove any old svg in the sources div
+        d3.selectAll('.sources').selectAll('svg')
           .filter(function(d, i) {
-            return i === index;
+            return i === +index;
           }).remove();
+
         size = {width: 430, height: 250};
         index = +index || 0;
 
@@ -89,6 +96,11 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       };
 
       var renderGraph = function(dataObj, index) {
+        //Remove any old svg in the timeline div
+        d3.selectAll('.timeline').selectAll('svg')
+          .filter(function(d, i) {
+            return i === +index;
+          }).remove();
 
         data = dataObj.timeSeries;
         //clear out contents of graph prior to rendering, to prevent stacking graphs
@@ -109,7 +121,6 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
         // parse UTC date/time
         var parseTime = d3.timeParse('%Y-%m-%dT%H:%M:%S.%LZ');
-
         // set X & Y range
         // range is the raw data values scaled to fit the graph dimensions
         var x = d3.scaleTime().range([0, width]);
@@ -124,7 +135,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           // responsive SVG needs these two attr's and an absence of height and width attr's
           // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
           // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-          .attr('viewBox', '0 0 ' + (width+60) + ' ' + (height + 40))
+          .attr('viewBox', '0 0 ' + (width+100) + ' ' + (height + 40))
           // append group element
           .append('g')
           // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
@@ -225,6 +236,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       };
 
       var renderSentiment = function(data, index) {
+        //Remove any old svg in the sentiment div
+        d3.selectAll('.sentiment').selectAll('svg')
+          .filter(function(d, i) {
+            return i === +index;
+          }).remove();
+
         var chartWidth = 300;
         var barHeight = 50;
         var groupHeight = barHeight * data.length;
@@ -381,6 +398,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       };
 
       var renderCloud = function(words, index, size) {
+        //Remove any old svg in the renderCloud div
+        d3.selectAll('.wordCloud').selectAll('svg')
+          .filter(function(d, i) {
+            return i === +index;
+          }).remove();
+
         size = size || {width: 960, height: 500};
 
         var total = words.reduce(function(accum, item) {
@@ -464,8 +487,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
   $scope.front = getFrontPage;
 
   $scope.addnewSearch = function(data) {
-    console.log(data);
-    $scope.front = $scope.front.concat($scope.front.slice());
+
+    data['img'] = "http://t3.gstatic.com/images?q=tbn:ANd9GcREpJpr5tU6OBpvbvNDsXTetzlp25zVjWGc8H8QiJ4YjuZ4-8hq2cdH_L_TMMl1ZGr2sYiILOOc";
+    data['traffic'] = "200+";
+    $scope.front.unshift(data);
+
+
   };
 
   $rootScope.addnewSearch = $scope.addnewSearch;
