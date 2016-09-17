@@ -496,11 +496,10 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
   $scope.front = getFrontPage;
 
   $scope.addnewSearch = function(data) {
-    console.log($scope.front)
+
     data['img'] = "http://t3.gstatic.com/images?q=tbn:ANd9GcREpJpr5tU6OBpvbvNDsXTetzlp25zVjWGc8H8QiJ4YjuZ4-8hq2cdH_L_TMMl1ZGr2sYiILOOc";
     data['traffic'] = "200+";
     $scope.front.unshift(data);
-    console.log($scope.front);
 
 
   };
