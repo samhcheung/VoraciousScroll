@@ -54,7 +54,7 @@ gulp.task('copy-html-files', function () {
 
 gulp.task('watch', function() {
     watch(['./public/**/*.js', './public/styles/style.css', './public/**/*.html', './public/*.ico'], function() {
-      gulp.start('minify-js');
+      gulp.start(['minify-js', 'minify-css', 'copy-html-files']);
     });
 });
 

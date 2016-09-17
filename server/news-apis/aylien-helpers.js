@@ -59,6 +59,26 @@ var articleImport = function(input, res, start, end, limit) {
 
 };
 
+var getMedia = function(input, start, end, cb) {
+  limit = 5;
+  var opts = {
+    'title': input,
+    // 'text': input,
+    'language': ['en'],
+    'sortBy': 'relevance',
+    'return': ['media'],
+    'publishedAtStart': start,
+    'publishedAtEnd': end,
+    'perPage': limit,
+  };
+  api.listStories(opts, function(err, data) {
+    if (err) { throw err; }
+    console.log('media returned successfully: ' + data);
+    cb(null, data);
+  });
+
+}
+
 // Get list of news sources and number of articles in past 175 days BY TITLE
 
 var getSources = function(input, start, end, cb) {
@@ -145,6 +165,9 @@ var getAnalysis = function(data, input, start, end, cb) {
     },
     sentiment: function(callback) {
       getSentiment(input, start, end, callback);
+    },
+    media: function(callback) {
+      getMedia(input, start, end, callback)
     }
   }, function(err, results) {
     if (err) { throw err; }
