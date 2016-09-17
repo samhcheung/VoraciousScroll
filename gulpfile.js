@@ -43,7 +43,7 @@ gulp.task('minify-js', function() {
   return gulp.src(['./public/services/cloudAlgo.js', './public/services/timeline.js', './public/services/services.js', './public/features/results/results.js', './public/features/home/home.js', './public/features/home/trends.js', './public/features/home/primaryArticle.js', './public/features/profile/profile.js', 'public/layout.js', 'public/features/nav/nav.js'])
   .pipe(concat('build.js'))
   .pipe(ngAnnotate())
-  // .pipe(uglify())
+  .pipe(uglify())
   .pipe(gulp.dest('./dist/'));
 });
 
