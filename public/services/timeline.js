@@ -31,15 +31,15 @@ angular.module('smartNews.timeline', [])
 
     // fixed size graph. These values are shorter than true innerWidth / innerHeight:
     var graph = document.getElementById('graph');
-    var width = window.innerWidth - margin.left - margin.right;
-    var height = window.innerHeight * 0.5 - margin.top - margin.bottom;
+    var width = 1650;
+    var height = 400;
 
     // parse UTC date/time
     var parseTime = d3.timeParse('%Y-%m-%dT%H:%M:%S.%LZ');
 
     // set X & Y range
     // range is the raw data values scaled to fit the graph dimensions
-    var x = d3.scaleTime().range([0, width]);
+    var x = d3.scaleTime().range([0, width + 50]);
     var y = d3.scaleLinear().range([height, 0]);
 
     var svg = d3.select('#graph')
@@ -49,7 +49,7 @@ angular.module('smartNews.timeline', [])
       // responsive SVG needs these two attr's and an absence of height and width attr's
       // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
       // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-      .attr('viewBox', '0 0 ' + 1850 + ' ' + 400 )
+      .attr('viewBox', '-50 0 ' + (width + 100) + ' ' + (height + 40) )
       // append group element
       .append('g')
       // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels

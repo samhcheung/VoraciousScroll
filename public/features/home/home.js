@@ -240,6 +240,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       };
 
       var renderSentiment = function(data, index) {
+        console.log(data, index)
         //Remove any old svg in the sentiment div
         if(index === '0') {
           d3.selectAll('.sentiment').selectAll('svg')
@@ -266,17 +267,20 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           for (var i = 0; i < data.length; i++) {
             var current = data[i];
             if (current.value === 'positive') {
-
               sorted[0].count = current.count;
-            } else {
-              if (current.value === 'neutral') {
-                sorted[1].count = current.count;
-              } else {
-                sorted[2].count = current.count;
-              }
+            } else if (current.value === 'neutral') {
+              sorted[1].count = current.count;
+            } else if (current.value === 'negative') {
+              sorted[2].count = current.count;
             }
-            sum += current.count;
+            
           }
+
+          for (var i = 0; i < sorted.length; i++) {
+            sorted[i].count = sorted[i].count || 1;
+            sum += sorted[i].count;
+          }
+          console.log(sorted);
           return sorted;
         };
 
@@ -285,7 +289,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
         for (var i = 0; i < data.length; i++) {
           zippedData.push(data[i].count / sum);
         }
-
+        console.log(data, zippedData);
         // Color scale
 
         var color = d3.scaleOrdinal()
