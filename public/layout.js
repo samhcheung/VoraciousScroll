@@ -64,15 +64,10 @@ angular.module('smartNews', [
   $httpProvider.interceptors.push('requestCookie');
 })
 .factory('requestCookie', function ($document, $cookies) {
-  // console.log('this factory');
   return {
     request: function (request) {
-      // var parsedCookie = $cookies.get('authenticate');
-      // console.log(parsedCookie, 'This is my document');
-      // // config.headers['x-session-token'] = SessionService.token
-      // // request.session.passport = parsedCookie;
+    
       request.xsrfCookieName = 'authenticate';
-      // console.log(request, 'My request object');
       return request;
     }
   };
@@ -119,14 +114,11 @@ angular.module('smartNews', [
       })
       .then(
         function(obj){
-          // console.log('obj:', obj);
           $state.go('main.results', {input: $scope.searchinput, articleReceived: false})
           .then(function() {
             window.objWin = obj;
             window.renderGraphWin = renderGraph.renderGraph;
-            //renderGraph.renderGraph(obj);
-            //renderGraph.renderSources(obj.data.trends);
-            //renderGraph.renderCloud(obj.data.keywords);
+           
           });
         },
         function(error){

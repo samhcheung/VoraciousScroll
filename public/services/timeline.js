@@ -1,12 +1,4 @@
-// TO-DOs
 
-// 1: Make it so timeline width fills out the width of parent div.
-// see: http://jsfiddle.net/shawnbot/BJLe6/
-// use document.getElementById('graph') instead of $('#graph');
-
-// Timeline height can be a fixed px height.
-
-// 2: Set up graph to start from the middle of y-axes rather than bottom
 
 angular.module('smartNews.timeline', [])
 
@@ -44,16 +36,10 @@ angular.module('smartNews.timeline', [])
 
     var svg = d3.select('#graph')
       .append('div')
-      // .classed('svg-container', true) //container class to make it responsive
       .append('svg')
-      // responsive SVG needs these two attr's and an absence of height and width attr's
-      // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
-      // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
       .attr('viewBox', '-50 0 ' + (width + 100) + ' ' + (height + 40) )
       // append group element
       .append('g')
-      // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
-      // .attr('transform', 'translate(' + ((window.innerWidth - width) / 2) + ',0)')
       .classed("svg-content-responsive", true);
 
     // div element for tooltip
@@ -133,11 +119,6 @@ angular.module('smartNews.timeline', [])
       })
       .on('click', function(d) {
         var startDate = d.publishedAt.split('T')[0];
-        // selectedDate.startDate = new Date(startDate).toISOString();
-        // var endDate = new Date(startDate);
-        // endDate = endDate.setDate(endDate.getDate() + 1);
-        // selectedDate.endDate = new Date(endDate).toISOString();
-
         var sdate = new Date(startDate);
         var timeDiff = Math.abs(sdate.getTime() - new Date());
         var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
@@ -185,8 +166,6 @@ angular.module('smartNews.timeline', [])
         .value(function(d) { return d.count; });
 
     var svg = d3.select(".sources").append("svg")
-        // .attr("width", width)
-        // .attr("height", height)
         .attr('viewBox', '0 0 ' + width + ' ' + height )
         .attr("class", 'sourcesSVG')
         .append("g")
@@ -245,8 +224,6 @@ angular.module('smartNews.timeline', [])
 
     var svg = d3.selectAll('.wordCloud')
       .append('svg')
-      // .attr('width', size.width)
-      // .attr('height', size.height)
       .attr('viewBox', '0 0 ' + size.width + ' ' + size.height)
       .append('g')
       .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')');
@@ -329,17 +306,10 @@ angular.module('smartNews.timeline', [])
 
     var yAxis = d3.axisLeft(y);
 
-      // .scale(y) // v3
-      // .tickFormat('')
-      // .tickSize(0)
-      // .orient('left');
-
     // Specify the chart area and dimensions
     var chart = d3.select('.chart')
       .append('svg')
       .attr('viewBox', '0 0 ' + 350 + ' ' + 180);
-      // .attr('width', spaceForLabels + chartWidth + spaceForLegend)
-      // .attr('height', chartHeight);
 
     // Create bars
     var bar = chart.selectAll('g')
