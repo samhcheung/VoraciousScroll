@@ -71,7 +71,8 @@ var getMedia = function(input, start, end, cb) {
   };
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
-    console.log('media returned successfully: ' + data);
+    console.log('media returned successfully: ' + data.stories[0].media[0].url);
+    
 
     cb(null, data.stories[0].media[0].url);
   });
