@@ -279,12 +279,12 @@ angular.module('smartNews.timeline', [])
   };
 
   var renderSentiment = function(data) {
-    var chartWidth = 300;
+    var chartWidth = 250;
     var barHeight = 50;
     var groupHeight = barHeight * data.length;
     var gapBetweenGroups = 10;
     var spaceForLabels = 0; // no label to the left
-    var spaceForLegend = 150;
+    var spaceForLegend = 100;
 
     // Zip the series data together (first values, second values, etc.)
     var zippedData = [];
