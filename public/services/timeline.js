@@ -49,11 +49,11 @@ angular.module('smartNews.timeline', [])
       // responsive SVG needs these two attr's and an absence of height and width attr's
       // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
       // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-      .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + 250 )
+      .attr('viewBox', '0 0 ' + 1850 + ' ' + 400 )
       // append group element
       .append('g')
       // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
-      .attr('transform', 'translate(' + ((window.innerWidth - width) / 2) + ',0)')
+      // .attr('transform', 'translate(' + ((window.innerWidth - width) / 2) + ',0)')
       .classed("svg-content-responsive", true);
 
     // div element for tooltip
@@ -145,9 +145,6 @@ angular.module('smartNews.timeline', [])
         selectedDate.startDate = "NOW-"+ diffDays + "DAYS"
         diffDays = diffDays-1;
         selectedDate.endDate = "NOW-"+ diffDays + "DAYS"
-        console.log("before",selectedDate.startDate)
-        console.log("after",selectedDate.endDate)
-
 
         $rootScope.$broadcast('user:clickDate', selectedDate);
       });
@@ -242,7 +239,7 @@ angular.module('smartNews.timeline', [])
       .range(['#222', '#333', '#444', '#555', '#666', '#777', '#888', '#999', '#aaa', '#bbb', '#ccc', '#ddd']);
 
     words = words.map(function(d) {
-      return {text: d.value, size: (total / d.count) / 10};
+      return {text: d.value, size: (total / d.count) / 5};
     });
 
     var svg = d3.selectAll('.wordCloud')
@@ -254,7 +251,6 @@ angular.module('smartNews.timeline', [])
       .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')');
 
     var drawCloud = function(words) {
-      console.log('inside drawCloud');
       var cloud = svg.selectAll('g text')
         .data(words, function(d) { return d.text; });
 
@@ -340,8 +336,9 @@ angular.module('smartNews.timeline', [])
     // Specify the chart area and dimensions
     var chart = d3.select('.chart')
       .append('svg')
-      .attr('width', spaceForLabels + chartWidth + spaceForLegend)
-      .attr('height', chartHeight);
+      .attr('viewBox', '0 0 ' + 350 + ' ' + 180);
+      // .attr('width', spaceForLabels + chartWidth + spaceForLegend)
+      // .attr('height', chartHeight);
 
     // Create bars
     var bar = chart.selectAll('g')
