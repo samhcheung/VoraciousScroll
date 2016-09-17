@@ -33,26 +33,26 @@ gulp.task('clean', function() {
 
 gulp.task('minify-css', function() {
   var opts = {comments:true,spare:true};
-  return gulp.src(['./client/**/*.css', '!./client/lib/**'])
+  return gulp.src(['./public/**/*.css'])
     .pipe(minifyCSS(opts))
     .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('minify-js', function() {
-  return gulp.src(['./client/app/services.js', './client/controllers/dashboard.js', './client/controllers/game.js', './client/controllers/createGame.js', './client/controllers/auth.js', './client/app/app.js'])
+  return gulp.src(['./public/services/cloudAlgo.js', './public/services/timeline.js', './public/services/services.js', './public/results/results.js', './public/features/home/home.js', './public/features/home/trends.js', './public/features/home/primaryArticle.js', './public/features/profile/profile.js', 'public/layout.js', 'public/features/nav/nav.js'])
     .pipe(concat('build.js'))
     .pipe(ngAnnotate())
     .pipe(uglify())
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('bower-files', function(){
-    return gulp.src(['./client/lib/lodash/lodash.js', './client/lib/angular/angular.js', './client/lib/ui-router/release/angular-ui-router.js', './client/lib/angular-simple-logger/dist/angular-simple-logger.js', './client/lib/angular-google-maps/dist/angular-google-maps.js', './client/lib/ngGeolocation/ngGeolocation.js'])
-        .pipe(concat('lib.js'))
-        .pipe(ngAnnotate())
-        .pipe(uglify())
-        .pipe(gulp.dest('./dist/lib'));
-});
+// gulp.task('bower-files', function(){
+//     return gulp.src(['./client/lib/lodash/lodash.js', './client/lib/angular/angular.js', './client/lib/ui-router/release/angular-ui-router.js', './client/lib/angular-simple-logger/dist/angular-simple-logger.js', './client/lib/angular-google-maps/dist/angular-google-maps.js', './client/lib/ngGeolocation/ngGeolocation.js'])
+//         .pipe(concat('lib.js'))
+//         .pipe(ngAnnotate())
+//         .pipe(uglify())
+//         .pipe(gulp.dest('./dist/lib'));
+// });
 
 gulp.task('copy-html-files', function () {
   gulp.src(['./client/**/*.html', './client/*.ico'])
