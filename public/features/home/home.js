@@ -380,51 +380,53 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
           });
       };
 
-      var renderCloud = function(words, index, size) {
-        size = size || {width: 960, height: 500};
+      var renderCloud = function(words, index) {
+        var size = {width: 300, height: 180};
 
         var total = words.reduce(function(accum, item) {
-      
           return accum + item.count;
         }, 0);
 
-        var color = $window.d3.scaleLinear()
-          .domain([0,1,2,3,4,5,6,10,15,20,100])
-          .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
-          
-        d3.layout.cloud().size([size.width - 100, size.height - 100]) // was 800x300
-          .words(words)
-          .rotate(0)
-          .fontSize(function(d) { return total / d.count; })
-          .on("end", draw)
-          .start();
+        var color = d3.scaleLinear()
+          .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
+          .range(['#222', '#333', '#444', '#555', '#666', '#777', '#888', '#999', '#aaa', '#bbb', '#ccc', '#ddd']);
 
-        function draw(words) {
-          d3.selectAll(".wordCloud")
+        words = words.map(function(d) {
+          return {text: d.value, size: (total / d.count) / 1.4};
+        });
+
+        var svg = d3.selectAll('.wordCloud')
           .filter(function(d, i) {
             return i === +index;
           })
+          .append('svg')
+          // .attr('width', size.width)
+          // .attr('height', size.height)
+          .attr('viewBox', '0 0 ' + size.width + ' ' + size.height)
+          .append('g')
+          .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')');
 
-          .append("svg")
-            // .attr("width", size.width /2) // was 850
-            // .attr("height", size.height /2) // was 350
-            .attr('viewBox', '0 0 ' + (size.width/2) + ' ' + (size.height/2))
+        var drawCloud = function(words) {
+          var cloud = svg.selectAll('g text')
+            .data(words, function(d) { return d.text; });
 
-            .attr("class", "wordcloud")
-            .append("g")
-            // without the transform, words words would get cutoff to the left and top, they would
-            // appear outside of the SVG area
-            .attr("transform", "translate(" + size.width/4 + "," + size.height/4 + ")")   // scale this?
-            .selectAll("text")
-            .data(words)
-            .enter().append("text")
-            .style("font-size", function(d) { return total / d.count + "px"; })
+          cloud.enter()
+            .append('text')
+            .attr('text-anchor', 'middle')
+            .text(function(d) { return d.text; })
+            .style('font-size', function(d) { return d.size + 'px'; })
             .style("fill", function(d, i) { return color(i); })
-            .attr("transform", function(d) {
-                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-            })
-            .text(function(d) { return d.value; });
-        }
+            .attr('transform', function(d) {
+              return 'translate(' + [d.x, d.y] + ')';
+            });
+        };
+
+        d3.layout.cloud().size([size.width, size.height])
+          .words(words)
+          .rotate(0)
+          .fontSize(function(d) { return d.size; })
+          .on('end', drawCloud)
+          .start();
       };
 
 
