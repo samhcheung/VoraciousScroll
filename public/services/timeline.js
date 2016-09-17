@@ -363,7 +363,7 @@ angular.module('smartNews.timeline', [])
     // Add text label in bar
     bar.append('text')
       .attr('x', function(d) {
-        return x(d) - 50;
+        return x(d) - 40;
       })
       .attr('y', barHeight / 2)
       .attr('fill', 'white')
