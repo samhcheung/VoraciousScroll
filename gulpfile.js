@@ -103,6 +103,7 @@ gulp.task('prodStart', function() {
   runSequence(
     'set-prod',
     'build',
-    'watchProd'
+    'watchProd',
+    'forever'
   );
 });
