@@ -497,8 +497,8 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
   $scope.addnewSearch = function(data) {
 
-    data['img'] = "http://t3.gstatic.com/images?q=tbn:ANd9GcREpJpr5tU6OBpvbvNDsXTetzlp25zVjWGc8H8QiJ4YjuZ4-8hq2cdH_L_TMMl1ZGr2sYiILOOc";
-    data['traffic'] = "200+";
+    // data.stories[0].media. = "http://t3.gstatic.com/images?q=tbn:ANd9GcREpJpr5tU6OBpvbvNDsXTetzlp25zVjWGc8H8QiJ4YjuZ4-8hq2cdH_L_TMMl1ZGr2sYiILOOc";
+    data['traffic'] = "many";
     $scope.front.unshift(data);
 
 

@@ -71,8 +71,9 @@ var getMedia = function(input, start, end, cb) {
   };
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
-    console.log('media returned successfully: ' + data.stories[0]);
-    cb(null, data);
+    console.log('media returned successfully: ' + data);
+
+    cb(null, data.stories[0].media[0].url);
   });
 
 }
@@ -164,7 +165,7 @@ var getAnalysis = function(data, input, start, end, cb) {
     sentiment: function(callback) {
       getSentiment(input, start, end, callback);
     },
-    media: function(callback) {
+    img: function(callback) {
       getMedia(input, start, end, callback)
     }
   }, function(err, results) {
