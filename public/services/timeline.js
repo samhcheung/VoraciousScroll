@@ -185,8 +185,9 @@ angular.module('smartNews.timeline', [])
         .value(function(d) { return d.count; });
 
     var svg = d3.select(".sources").append("svg")
-        .attr("width", width)
-        .attr("height", height)
+        // .attr("width", width)
+        // .attr("height", height)
+        .attr('viewBox', '0 0 ' + width + ' ' + height )
         .attr("class", 'sourcesSVG')
         .append("g")
         .attr("transform", "translate(130," + height / 2 + ")")
@@ -244,9 +245,9 @@ angular.module('smartNews.timeline', [])
 
     var svg = d3.selectAll('.wordCloud')
       .append('svg')
-      .attr('width', size.width)
-      .attr('height', size.height)
-      // .attr('viewBox', '0 0 ' + size.width + ' ' + size.height)
+      // .attr('width', size.width)
+      // .attr('height', size.height)
+      .attr('viewBox', '0 0 ' + size.width + ' ' + size.height)
       .append('g')
       .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')');
 
