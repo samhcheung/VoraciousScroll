@@ -11,7 +11,7 @@ var shell = require('gulp-shell');
 
 gulp.task('nodemon', function() {
   nodemon({
-    script: 'server/server.js',
+    script: 'server/index.js',
     ext: 'html js'
   })
   .on('restart', function() {
