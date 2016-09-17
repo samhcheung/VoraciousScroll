@@ -58,11 +58,6 @@ gulp.task('watchDev', function() {
     });
 });
 
-gulp.task('watchProd', function() {
-    watch(['./public/**/*.js', './public/styles/style.css', './public/**/*.html', './public/*.ico'], function() {
-      gulp.start(['minify-js', 'minify-css', 'copy-html-files', 'stop']);
-    });
-});
 
 gulp.task('set-prod', function() {
     return process.env.NODE_ENV = 'production';
@@ -80,6 +75,12 @@ gulp.task('stop', shell.task([
   'forever stop server/index.js'
 ]));
  
+gulp.task('watchProd', function() {
+    watch(['./public/**/*.js', './public/styles/style.css', './public/**/*.html', './public/*.ico'], function() {
+      gulp.start(['minify-js', 'minify-css', 'copy-html-files', 'stop', 'forever']);
+    });
+});
+
 gulp.task('default', ['lint', 'nodemon']);
 
 gulp.task('build', function() {
@@ -102,7 +103,6 @@ gulp.task('prodStart', function() {
   runSequence(
     'set-prod',
     'build',
-    'watchProd',
-    'forever'
+    'watchProd'
   );
 });
