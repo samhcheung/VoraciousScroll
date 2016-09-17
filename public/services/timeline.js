@@ -181,7 +181,7 @@ angular.module('smartNews.timeline', [])
 
     var arc = d3.arc()
         .outerRadius(radius - 10)
-        .innerRadius(radius - 70);
+        .innerRadius(radius - 50);
 
     var pie = d3.pie()
         .sort(null)
