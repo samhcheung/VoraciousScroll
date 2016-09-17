@@ -26,10 +26,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
         //   }).remove();
 
         //Remove any old svg in the sources div
-        d3.selectAll('.sources').selectAll('svg')
-          .filter(function(d, i) {
-            return i === +index;
-          }).remove();
+        if(index === '0') {
+          d3.selectAll('.sources').selectAll('svg')
+            .filter(function(d, i) {
+              return i > 0;
+            }).remove();
+        }
 
         size = {width: 430, height: 250};
         index = +index || 0;
@@ -97,10 +99,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
       var renderGraph = function(dataObj, index) {
         //Remove any old svg in the timeline div
-        d3.selectAll('.timeline').selectAll('svg')
-          .filter(function(d, i) {
-            return i === +index;
-          }).remove();
+        if(index === '0') {
+          d3.selectAll('.timeline').selectAll('svg')
+            .filter(function(d, i) {
+              return i > 0;
+            }).remove();
+        }
 
         data = dataObj.timeSeries;
         //clear out contents of graph prior to rendering, to prevent stacking graphs
@@ -237,10 +241,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
 
       var renderSentiment = function(data, index) {
         //Remove any old svg in the sentiment div
-        d3.selectAll('.sentiment').selectAll('svg')
-          .filter(function(d, i) {
-            return i === +index;
-          }).remove();
+        if(index === '0') {
+          d3.selectAll('.sentiment').selectAll('svg')
+            .filter(function(d, i) {
+              return i > 0;
+            }).remove();
+        }
 
         var chartWidth = 300;
         var barHeight = 50;
@@ -400,10 +406,12 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
       var renderCloud = function(words, index) {
         var size = {width: 300, height: 180};
         //Remove any old svg in the renderCloud div
-        d3.selectAll('.wordCloud').selectAll('svg')
-          .filter(function(d, i) {
-            return i === +index;
-          }).remove();
+        if(index === '0') {
+          d3.selectAll('.wordCloud').selectAll('svg')
+            .filter(function(d, i) {
+              return i > 0;
+            }).remove();
+        }  
 
         var total = words.reduce(function(accum, item) {
           return accum + item.count;
@@ -488,10 +496,11 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
   $scope.front = getFrontPage;
 
   $scope.addnewSearch = function(data) {
-
+    console.log($scope.front)
     data['img'] = "http://t3.gstatic.com/images?q=tbn:ANd9GcREpJpr5tU6OBpvbvNDsXTetzlp25zVjWGc8H8QiJ4YjuZ4-8hq2cdH_L_TMMl1ZGr2sYiILOOc";
     data['traffic'] = "200+";
     $scope.front.unshift(data);
+    console.log($scope.front);
 
 
   };
