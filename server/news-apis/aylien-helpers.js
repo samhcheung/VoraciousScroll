@@ -66,14 +66,12 @@ var getMedia = function(input, start, end, cb) {
     // 'text': input,
     'language': ['en'],
     'sortBy': 'relevance',
-    'return': ['media'],
-    'publishedAtStart': start,
-    'publishedAtEnd': end,
+    '_return': ['media'],
     'perPage': limit,
   };
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
-    console.log('media returned successfully: ' + data);
+    console.log('media returned successfully: ' + data.stories[0]);
     cb(null, data);
   });
 
