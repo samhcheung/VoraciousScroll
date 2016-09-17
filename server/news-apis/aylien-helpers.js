@@ -59,14 +59,14 @@ var articleImport = function(input, res, start, end, limit) {
 
 };
 
-var getMedia = function(input, start, end, limit) {
+var getMedia = function(input, start, end, cb) {
   limit = 5;
   var opts = {
     'title': input,
     // 'text': input,
     'language': ['en'],
     'sortBy': 'relevance',
-    'return': 'media',
+    'return': ['media'],
     'publishedAtStart': start,
     'publishedAtEnd': end,
     'perPage': limit,
@@ -74,7 +74,7 @@ var getMedia = function(input, start, end, limit) {
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
     console.log('media returned successfully: ' + data);
-    callback(null, data);
+    cb(null, data);
   });
 
 }
