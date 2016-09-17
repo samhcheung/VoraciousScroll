@@ -320,8 +320,8 @@ angular.module('smartNews.timeline', [])
 
     // Color scale
 
-    var color = d3.scaleOrdinal(d3.schemeCategory20);
-    // var color = d3.scale.category20(); // v3
+    var color = d3.scaleOrdinal()
+     .range(['#70C1B3', '#FFE066', '#F25F5C']);
     var chartHeight = barHeight * zippedData.length + gapBetweenGroups;
 
     var x = d3.scaleLinear()
