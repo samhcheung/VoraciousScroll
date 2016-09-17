@@ -229,9 +229,9 @@ angular.module('smartNews.timeline', [])
   /*
    * Cloud graph starts here
    */
-  var renderCloud = function(words, index) {
-    index = index || 0;
+  var renderCloud = function(words) {
     var size = {width: 300, height: 180};
+    //Remove any old svg in the renderCloud div
 
     var total = words.reduce(function(accum, item) {
       return accum + item.count;
@@ -242,21 +242,19 @@ angular.module('smartNews.timeline', [])
       .range(['#222', '#333', '#444', '#555', '#666', '#777', '#888', '#999', '#aaa', '#bbb', '#ccc', '#ddd']);
 
     words = words.map(function(d) {
-      return {text: d.value, size: (total / d.count) / 1.4};
+      return {text: d.value, size: (total / d.count) / 10};
     });
 
     var svg = d3.selectAll('.wordCloud')
-      .filter(function(d, i) {
-        return i === +index;
-      })
       .append('svg')
-      // .attr('width', size.width)
-      // .attr('height', size.height)
-      .attr('viewBox', '0 0 ' + size.width + ' ' + size.height)
+      .attr('width', size.width)
+      .attr('height', size.height)
+      // .attr('viewBox', '0 0 ' + size.width + ' ' + size.height)
       .append('g')
       .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')');
 
     var drawCloud = function(words) {
+      console.log('inside drawCloud');
       var cloud = svg.selectAll('g text')
         .data(words, function(d) { return d.text; });
 
@@ -274,6 +272,7 @@ angular.module('smartNews.timeline', [])
     d3.layout.cloud().size([size.width, size.height])
       .words(words)
       .rotate(0)
+      .padding(5)
       .fontSize(function(d) { return d.size; })
       .on('end', drawCloud)
       .start();
@@ -340,6 +339,7 @@ angular.module('smartNews.timeline', [])
 
     // Specify the chart area and dimensions
     var chart = d3.select('.chart')
+      .append('svg')
       .attr('width', spaceForLabels + chartWidth + spaceForLegend)
       .attr('height', chartHeight);
 
@@ -372,26 +372,10 @@ angular.module('smartNews.timeline', [])
         return Math.floor(d * 100) + '%';
       });
 
-    // Draw labels
-    // bar.append('text')
-    //   .attr('class', 'label')
-    //   .attr('x', function(d) {
-    //     return -10;
-    //   })
-    //   .attr('y', groupHeight / 2)
-    //   .attr('dy', '.35em')
-    //   .text(function(d, i) {
-    //     if (i % data.length === 0) {
-    //       return 'Sentiments';
-    //     } else {
-    //       return '';
-    //     }
-    //   });
-
-    // chart.append('g')
-    //   .attr('class', 'y axis')
-    //   .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
-    //   .call(yAxis);
+    chart.append('g')
+      .attr('class', 'y axis')
+      .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
+      .call(yAxis);
 
     // Draw legend
     var legendRectSize = barHeight / 3;
