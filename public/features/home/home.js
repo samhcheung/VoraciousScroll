@@ -340,9 +340,14 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
             return Math.floor(d * 100) + '%';
           });
 
+        chart.append('g')
+          .attr('class', 'y axis')
+          .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
+          .call(yAxis);
+
         // Draw legend
         var legendRectSize = barHeight / 3;
-        var legendSpacing = 4;
+        var legendSpacing = 8;
 
         var legend = chart.selectAll('.legend')
           .data(data)
