@@ -249,7 +249,7 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
         }
 
         var chartWidth = 300;
-        var barHeight = 50;
+        var barHeight = 80;
         var groupHeight = barHeight * data.length;
         var gapBetweenGroups = 10;
         var spaceForLabels = 0; // no label to the left
