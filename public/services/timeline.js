@@ -49,7 +49,7 @@ angular.module('smartNews.timeline', [])
       // responsive SVG needs these two attr's and an absence of height and width attr's
       // .attr('preserveAspectRatio', 'xMinYMin meet') // preserves aspect ratio by 'fitting' the viewbox to the viewport, rather than filling
       // .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + (window.innerHeight))
-      .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + 400 )
+      .attr('viewBox', '0 0 ' + (window.innerWidth) + ' ' + 250 )
       // append group element
       .append('g')
       // center group element on page by subtracting viewbox length from viewport length, halving, and spacing that many pixels
@@ -171,7 +171,7 @@ angular.module('smartNews.timeline', [])
 
   var renderSources = function(trends) {
     d3.select('.sourcesSVG').remove();
-    size = {width: 430, height: 250};
+    size = {width: 400, height: 180};
 
     var width = size.width,
         height = size.height,
@@ -181,7 +181,7 @@ angular.module('smartNews.timeline', [])
 
     var arc = d3.arc()
         .outerRadius(radius - 10)
-        .innerRadius(radius - 70);
+        .innerRadius(radius - 50);
 
     var pie = d3.pie()
         .sort(null)
@@ -229,48 +229,62 @@ angular.module('smartNews.timeline', [])
   /*
    * Cloud graph starts here
    */
-  var renderCloud = function(words, size) {
-    size = size || {width: 960, height: 500};
+  var renderCloud = function(words) {
+    var size = {width: 300, height: 180};
+    //Remove any old svg in the renderCloud div
 
-    var color = $window.d3.scale.linear()
-      .domain([0,1,2,3,4,5,6,10,15,20,100])
-      .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
-      
-    d3.layout.cloud().size([size.width - 50, size.height - 50]) // was 800x300
-      .words(frequency_list)
-      .rotate(0)
-      .fontSize(function(d) { return d.size; })
-      .on("end", draw)
-      .start();
+    var total = words.reduce(function(accum, item) {
+      return accum + item.count;
+    }, 0);
 
-    function draw(words) {
-      d3.select("body").append("svg")
-        .attr("width", size.width + 50) // was 850
-        .attr("height", size.height + 50) // was 350
-        .attr("class", "wordcloud")
-        .append("g")
-        // without the transform, words words would get cutoff to the left and top, they would
-        // appear outside of the SVG area
-        .attr("transform", "translate(320,200)")   // scale this?
-        .selectAll("text")
-        .data(words)
-        .enter().append("text")
-        .style("font-size", function(d) { return d.size + "px"; })
+    var color = d3.scaleLinear()
+      .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
+      .range(['#222', '#333', '#444', '#555', '#666', '#777', '#888', '#999', '#aaa', '#bbb', '#ccc', '#ddd']);
+
+    words = words.map(function(d) {
+      return {text: d.value, size: (total / d.count) / 10};
+    });
+
+    var svg = d3.selectAll('.wordCloud')
+      .append('svg')
+      .attr('width', size.width)
+      .attr('height', size.height)
+      // .attr('viewBox', '0 0 ' + size.width + ' ' + size.height)
+      .append('g')
+      .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')');
+
+    var drawCloud = function(words) {
+      console.log('inside drawCloud');
+      var cloud = svg.selectAll('g text')
+        .data(words, function(d) { return d.text; });
+
+      cloud.enter()
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .text(function(d) { return d.text; })
+        .style('font-size', function(d) { return d.size + 'px'; })
         .style("fill", function(d, i) { return color(i); })
-        .attr("transform", function(d) {
-            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-        })
-        .text(function(d) { return d.text; });
-    }
+        .attr('transform', function(d) {
+          return 'translate(' + [d.x, d.y] + ')';
+        });
+    };
+
+    d3.layout.cloud().size([size.width, size.height])
+      .words(words)
+      .rotate(0)
+      .padding(5)
+      .fontSize(function(d) { return d.size; })
+      .on('end', drawCloud)
+      .start();
   };
 
   var renderSentiment = function(data) {
-    var chartWidth = 300;
+    var chartWidth = 250;
     var barHeight = 50;
     var groupHeight = barHeight * data.length;
     var gapBetweenGroups = 10;
     var spaceForLabels = 0; // no label to the left
-    var spaceForLegend = 150;
+    var spaceForLegend = 100;
 
     // Zip the series data together (first values, second values, etc.)
     var zippedData = [];
@@ -305,8 +319,8 @@ angular.module('smartNews.timeline', [])
 
     // Color scale
 
-    var color = d3.scaleOrdinal(d3.schemeCategory20);
-    // var color = d3.scale.category20(); // v3
+    var color = d3.scaleOrdinal()
+     .range(['#70C1B3', '#FFE066', '#F25F5C']);
     var chartHeight = barHeight * zippedData.length + gapBetweenGroups;
 
     var x = d3.scaleLinear()
@@ -325,6 +339,7 @@ angular.module('smartNews.timeline', [])
 
     // Specify the chart area and dimensions
     var chart = d3.select('.chart')
+      .append('svg')
       .attr('width', spaceForLabels + chartWidth + spaceForLegend)
       .attr('height', chartHeight);
 
@@ -348,7 +363,7 @@ angular.module('smartNews.timeline', [])
     // Add text label in bar
     bar.append('text')
       .attr('x', function(d) {
-        return x(d) - 50;
+        return x(d) - 40;
       })
       .attr('y', barHeight / 2)
       .attr('fill', 'white')
@@ -357,26 +372,10 @@ angular.module('smartNews.timeline', [])
         return Math.floor(d * 100) + '%';
       });
 
-    // Draw labels
-    // bar.append('text')
-    //   .attr('class', 'label')
-    //   .attr('x', function(d) {
-    //     return -10;
-    //   })
-    //   .attr('y', groupHeight / 2)
-    //   .attr('dy', '.35em')
-    //   .text(function(d, i) {
-    //     if (i % data.length === 0) {
-    //       return 'Sentiments';
-    //     } else {
-    //       return '';
-    //     }
-    //   });
-
-    // chart.append('g')
-    //   .attr('class', 'y axis')
-    //   .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
-    //   .call(yAxis);
+    chart.append('g')
+      .attr('class', 'y axis')
+      .attr('transform', 'translate(' + spaceForLabels + ', ' + -gapBetweenGroups / 2 + ')')
+      .call(yAxis);
 
     // Draw legend
     var legendRectSize = barHeight / 3;
