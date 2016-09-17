@@ -171,7 +171,7 @@ angular.module('smartNews.timeline', [])
 
   var renderSources = function(trends) {
     d3.select('.sourcesSVG').remove();
-    size = {width: 430, height: 250};
+    size = {width: 400, height: 180};
 
     var width = size.width,
         height = size.height,
