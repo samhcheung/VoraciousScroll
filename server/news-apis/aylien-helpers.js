@@ -71,7 +71,7 @@ var getMedia = function(input, start, end, cb) {
   };
   api.listStories(opts, function(err, data) {
     if (err) { throw err; }
-    var url = data.stories[0] ? data.stories[0].media[0].url : 'http://www.designjenesis.com/web120/a6/images/unavailable.png'
+    var url = (!data.stories[0] || !data.stories[0].media[0] || !data.stories[0].media[0].url) ? 'http://www.designjenesis.com/web120/a6/images/unavailable.png' : data.stories[0].media[0].url
     console.log('media returned successfully: ' + url);
     
 
