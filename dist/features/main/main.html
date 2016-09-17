@@ -1,0 +1,28 @@
+<div>
+  <div class="upperdiv container" ng-controller="SearchCtrl">
+    <script type="text/ng-template" id="customTemplate.html">
+      <a>
+        <div class="dropdown-image">
+          <img ng-src="{{match.model.image}}">
+        </div>
+        <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+      </a>
+    </script>
+    <div class="input-group-lg">
+      <input
+        type="text"
+        class="searchbar form-control"
+        placeholder="Enter Search Keyword"
+        ng-model="searchinput"
+        uib-typeahead="item.title for item in getDropdown($viewValue)"
+        typeahead-template-url="customTemplate.html"
+        typeahead-on-select="renderView()"
+        typeahead-wait-ms="100"
+      />
+    </div>
+    <!-- Display search input result -->
+    <!-- <pre>Stories: <span ng-bind="searchinput"></span></pre> -->
+
+  </div>
+  <div class="container" ui-view></div>
+</div>

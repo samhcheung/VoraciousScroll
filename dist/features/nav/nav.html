@@ -1,0 +1,49 @@
+<nav class="navbar navbar-static-top">
+
+  <div class="container">
+
+    <!-- Authenticated LIs -->
+    <ul class="nav navbar-nav">
+
+      <li ng-show="isAuth()">
+        <p class="navbar-text">
+          <!-- Welcome Back {{user.firstname}} -->
+        </p>
+      </li>
+
+      <!-- Unauthenticated LIs -->
+
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+
+      <li>
+        <a ui-sref="main.home" class="navbar-link">
+          Home
+        </a>
+      </li>
+
+      <!-- Authenticated LIs -->
+      <li ng-show="isAuth()">
+        <a ui-sref="profile" class="navbar-link">
+          My Articles
+        </a>
+      </li>
+
+      <li ng-show="isAuth()">
+        <a href="#" ng-click="logout()" class="navbar-link">
+          Log out
+        </a>
+      </li>
+
+      <!-- Unauthenticated LIs -->
+      <li ng-hide="isAuth()">
+        <a href="/auth/facebook" class="navbar-link">
+          Log in with Facebook
+        </a>
+      </li>
+
+    </ul>
+  </div>
+
+</nav>
