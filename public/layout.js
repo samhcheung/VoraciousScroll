@@ -139,4 +139,22 @@ angular.module('smartNews', [
   //Pass the renderView function to rootScope
   $rootScope.renderView = $scope.renderView;
 
+  $scope.loadNewBox = function() {
+    console.log('loadnewbox')
+    var url = '/results/' + $scope.searchinput;
+    if ($scope.searchinput) {
+      $http({
+        method: 'GET',
+        url: url
+      })
+      .then(
+        function(obj){
+          console.log(obj);
+          //Trim keywords to top 20 for wordCloud sizing/spacing
+          obj.data.keywords = obj.data.keywords.slice(0,20);
+          $rootScope.addnewSearch(obj.data)
+        });
+    }
+  }
+
 });

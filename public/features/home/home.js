@@ -462,6 +462,14 @@ angular.module('smartNews.home', ['smartNews.services', 'smartNews.timeline'])
   }
   //getFrontPage is from the resolve of loading this template and homectrl
   $scope.front = getFrontPage;
+
+  $scope.addnewSearch = function(data) {
+    console.log(data);
+    $scope.front = $scope.front.concat($scope.front.slice());
+  };
+
+  $rootScope.addnewSearch = $scope.addnewSearch;
+
   $scope.dummies = [
     {
   "topic": "anything",
