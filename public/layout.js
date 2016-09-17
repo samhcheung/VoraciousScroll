@@ -9,7 +9,8 @@ angular.module('smartNews', [
   'smartNews.timeline',
   'smartNews.services',
   'ngSanitize',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngAnimate'
 ])
 
 .config(function($urlRouterProvider, $stateProvider, $httpProvider) {
