@@ -123,8 +123,8 @@ angular.module('smartNews', [
           .then(function() {
             window.objWin = obj;
             window.renderGraphWin = renderGraph.renderGraph;
-            renderGraph.renderGraph(obj);
-            renderGraph.renderSources(obj.data.trends);
+            //renderGraph.renderGraph(obj);
+            //renderGraph.renderSources(obj.data.trends);
             //renderGraph.renderCloud(obj.data.keywords);
           });
         },

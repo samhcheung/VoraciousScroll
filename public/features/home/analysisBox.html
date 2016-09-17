@@ -1,15 +1,16 @@
-<div class="analysisBox container-fluid">
-          <div class="trend-rank">{{$index + 1}}</div>
+<div class="analysisBox container-fluid" ng-click="clickRow($index)">
+  
+  <div class="text-left trend-topic link" ng-click="rendView(dummy.topic)">{{dummy.topic}}</div>
+
   <div class="row">
     <div class="col-xs-2">
-      <div class="link trend-topic" ng-click="rendView(dummy.topic)">{{dummy.topic}}</div>
       <div class="trend-traffic">{{ dummy.traffic }} hits</div>
       <img class="trend-image img-responsive" ng-src="{{ dummy.img }}" alt="trend image">
     </div>
          
     <div class="timeline col-xs-10"></div>
   </div>
-  <div class="row">
+  <div class="row cssSlide" ng-show="rowshow[$index]">
     <div class="sources col-xs-4"></div>
     <div class="wordCloud col-xs-4"></div>
     <div class="sentiment col-xs-4"></div>
