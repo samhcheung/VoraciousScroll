@@ -34,11 +34,7 @@ gulp.task('clean', function() {
 
 gulp.task('minify-css', function() {
   var opts = {comments:true,spare:true};
-<<<<<<< e0b39bdd63004d5501d749e1d6c5e3a53d3da9d7
-  return gulp.src(['./public/styles/style.css'])
-=======
   return watch(['./public/**/*.css'])
->>>>>>> Add gulp build processes with watch
     .pipe(minifyCSS(opts))
     .pipe(gulp.dest('./dist/'));
 });
