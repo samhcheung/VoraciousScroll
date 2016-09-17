@@ -28,6 +28,7 @@
     "gulp-nodemon": "^2.1.0",
     "gulp-shell": "^0.5.2",
     "gulp-uglify": "^2.0.0",
+    "gulp-watch": "^4.3.9",
     "jshint": "^2.9.3",
     "run-sequence": "^1.2.2"
   },

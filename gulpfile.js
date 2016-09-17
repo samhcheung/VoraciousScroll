@@ -8,6 +8,7 @@ var clean = require('gulp-clean');
 var runSequence = require('run-sequence');
 var ngAnnotate = require('gulp-ng-annotate');
 var shell = require('gulp-shell');
+var watch = require('gulp-watch');
 
 gulp.task('nodemon', function() {
   nodemon({
@@ -33,7 +34,7 @@ gulp.task('clean', function() {
 
 gulp.task('minify-css', function() {
   var opts = {comments:true,spare:true};
-  return gulp.src(['./public/**/*.css'])
+  return watch(['./public/**/*.css'])
     .pipe(minifyCSS(opts))
     .pipe(gulp.dest('./dist/'));
 });
@@ -55,7 +56,7 @@ gulp.task('minify-js', function() {
 // });
 
 gulp.task('copy-html-files', function () {
-  gulp.src(['./client/**/*.html', './client/*.ico'])
+  gulp.src(['./public/**/*.html', './public/*.ico'])
     .pipe(gulp.dest('dist/'));
 });
 
@@ -80,7 +81,7 @@ gulp.task('default', ['lint', 'nodemon']);
 gulp.task('build', function() {
   runSequence(
     'clean',
-    ['lint', 'minify-css', 'minify-js', 'copy-html-files', 'bower-files']
+    ['lint', 'minify-css', 'minify-js', 'copy-html-files']
   );
 });
 
