@@ -385,12 +385,12 @@ div.tooltip-articles {
   fill: black;
   font: 14px sans-serif;
   text-anchor: start;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .sentiment text {
-  fill: black;
-  font: 10px sans-serif;
+  fill: white;
+  font: 20px sans-serif;
   text-anchor: end;
 }
 
