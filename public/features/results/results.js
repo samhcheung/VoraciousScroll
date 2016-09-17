@@ -46,6 +46,7 @@ angular.module('smartNews.results', [])
           console.log(obj, 'obj');
           renderGraph.renderSources(obj.data.sources);
           renderGraph.renderSentiment(obj.data.sentiment);
+          renderGraph.renderCloud(obj.data.keywords);
         },
         function(error){
           console.log('Error', error);
